@@ -8,8 +8,6 @@ Built using **Python, Flask, SQLAlchemy, SQLite, HTML, CSS, JavaScript, Jinja2, 
 
 The platform acts as a **personal AI Career Coach**, helping students improve their resumes, prepare for interviews, analyze skill gaps, predict placement readiness, and generate personalized career roadmaps—all from a single dashboard.
 
----
-
 # 🚀 Key Features
 
 ## 🤖 AI Career Chat
@@ -22,8 +20,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Interview preparation
 - ChatGPT-like conversational interface
 
----
-
 ## 📄 Resume Analyzer
 
 - Upload PDF resumes
@@ -32,8 +28,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Strength & weakness analysis
 - Improvement suggestions
 - Professional recommendations
-
----
 
 ## 📑 ATS Resume Checker
 
@@ -45,8 +39,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - ATS score generation
 - Actionable recommendations
 
----
-
 ## 🎯 Placement Predictor
 
 - Predict placement readiness using student profile
@@ -57,7 +49,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Personalized improvement roadmap
 - Interactive prediction reports
 
----
 
 ## 🛣️ Career Roadmap Generator
 
@@ -69,8 +60,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Career milestones
 - Goal tracking
 
----
-
 ## 🎤 AI Interview Preparation
 
 - HR Interview Questions
@@ -81,8 +70,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Communication improvement
 - Confidence-building suggestions
 
----
-
 ## 🧠 Skill Gap Analyzer
 
 - Analyze current skills
@@ -92,7 +79,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Technology roadmap
 - Skill improvement tracking
 
----
 
 ## 👤 Student Dashboard
 
@@ -104,7 +90,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Modern analytics
 - Responsive UI
 
----
 
 ## 👨‍💼 Admin Panel
 
@@ -119,7 +104,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Announcements
 - Activity tracking
 
----
 
 # ✨ Modern UI/UX
 
@@ -134,7 +118,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Mobile-Friendly Design
 - Professional User Experience
 
----
 
 # 🛠️ Tech Stack
 
@@ -146,14 +129,12 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - SQLite
 - Jinja2
 
----
 
 ## AI Integration
 
 - Groq API
 - Llama 3.3 70B Versatile
 
----
 
 ## Frontend
 
@@ -163,13 +144,11 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Bootstrap
 - Chart.js
 
----
 
 ## Database
 
 - SQLite
 
----
 
 ## Security
 
@@ -178,7 +157,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Authentication & Authorization
 - Admin Role Protection
 
----
 
 # 🎯 Project Objectives
 
@@ -190,7 +168,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - Predict placement readiness with actionable insights.
 - Deliver a modern, user-friendly career development platform.
 
----
 
 # 🌟 Highlights
 
@@ -207,41 +184,6 @@ The platform acts as a **personal AI Career Coach**, helping students improve th
 - 📱 Fully Responsive Design
 - 🎨 Modern Enterprise-Level UI
 
----
-
-# 📂 Project Structure
-
-```text
-Bodhini-AI/
-│
-├── app.py
-├── database.py
-├── requirements.txt
-├── .env
-│
-├── templates/
-│   ├── landing.html
-│   ├── dashboard.html
-│   ├── chat.html
-│   ├── resume_analyzer.html
-│   ├── ats_checker.html
-│   ├── placement_predictor.html
-│   ├── roadmap.html
-│   ├── interview.html
-│   ├── skill_gap.html
-│   └── admin/
-│
-├── static/
-│   ├── css/
-│   ├── js/
-│   ├── images/
-│   └── uploads/
-│
-└── instance/
-    └── bodhini.db
-```
-
----
 
 # 📈 Future Enhancements
 
@@ -258,8 +200,6 @@ Bodhini-AI/
 - 📧 Email Notifications
 - 🏫 Multi-College Support
 
----
-
 # 🎓 Use Cases
 
 - College Placement Cells
@@ -270,15 +210,12 @@ Bodhini-AI/
 - Training Institutes
 - Job Seekers
 
----
-
 # 💡 Why Bodhini AI?
 
 Bodhini AI bridges the gap between **academic learning** and **industry expectations** by leveraging the power of Artificial Intelligence. It empowers students with personalized career insights, practical recommendations, and intelligent tools that enhance employability and placement success.
 
 Whether it's preparing an ATS-friendly resume, practicing interviews, identifying skill gaps, or building a structured career roadmap, Bodhini AI serves as a complete AI-powered career companion.
 
----
 
 # 👩‍💻 Developed By
 
@@ -286,7 +223,6 @@ Whether it's preparing an ATS-friendly resume, practicing interviews, identifyin
 
 *A modern AI-powered platform built to simplify career guidance, enhance placement preparation, and empower students with intelligent insights for successful careers.*
 
----
 
 # ⭐ Support the Project
 
