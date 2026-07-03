@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+groq
+python-dotenv
+pdfplumber
+python-docx
+fpdf2
+openpyxl

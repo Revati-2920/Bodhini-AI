@@ -1,0 +1,30 @@
+from database import (
+    db,
+    User,
+    Prediction,
+    ResumeAnalysis,
+    PlacementPrediction,
+    CareerRoadmap,
+    InterviewHistory,
+    SkillGapAnalysis,
+    AIChatLog,
+    Company,
+    Event,
+    LearningResource,
+    Announcement,
+    AdminSettings,
+    UserGamification,
+    Bookmark,
+    Notification,
+    UserCertificate,
+    Feedback,
+    ActivityLog,
+)
+
+__all__ = [
+    'db', 'User', 'Prediction', 'ResumeAnalysis', 'PlacementPrediction',
+    'CareerRoadmap', 'InterviewHistory', 'SkillGapAnalysis', 'AIChatLog',
+    'Company', 'Event', 'LearningResource', 'Announcement', 'AdminSettings',
+    'UserGamification', 'Bookmark', 'Notification', 'UserCertificate',
+    'Feedback', 'ActivityLog',
+]
