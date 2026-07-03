@@ -1,0 +1,53 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Resources{% endblock %}
+{% block page_title %}Learning Resources{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-book"></i> Learning Resources</h2>
+        <div class="admin-toolbar">
+            <form method="GET" style="display:flex;gap:10px;">
+                <input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}">
+                <select name="category" class="admin-select">
+                    <option value="">All Categories</option>
+                    {% for c in ['PDF','Notes','Videos','Roadmaps','Resume Templates','Interview PDFs','Coding Sheets'] %}
+                    <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button>
+            </form>
+            <a href="{{ url_for('admin.resource_form') }}" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-plus"></i> Upload Resource</a>
+        </div>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Title</th><th>Category</th><th>Type</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td><strong>{{ item.title }}</strong></td>
+                    <td>{{ item.category or '—' }}</td>
+                    <td>{{ item.resource_type or '—' }}</td>
+                    <td><span class="status-badge {% if item.is_active %}status-active{% else %}status-disabled{% endif %}">{{ 'Active' if item.is_active else 'Inactive' }}</span></td>
+                    <td>{{ item.created_at or '—' }}</td>
+                    <td>
+                        {% if item.file_path %}<a href="{{ url_for('static', filename=item.file_path) }}" class="admin-btn admin-btn-outline admin-btn-sm" target="_blank"><i class="fas fa-download"></i></a>{% endif %}
+                        <a href="{{ url_for('admin.resource_form', item_id=item.id) }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{ url_for('admin.resource_delete', item_id=item.id) }}" style="display:inline;">
+                            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" data-confirm="Delete this resource?"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-book"></i><h3>No Resources</h3><p><a href="{{ url_for('admin.resource_form') }}" class="admin-btn admin-btn-primary admin-btn-sm">Upload Resource</a></p></div>
+    {% endif %}
+</div>
+{% endblock %}

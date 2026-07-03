@@ -1,0 +1,85 @@
+{% extends 'admin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-kpi-grid">
+    {% set kpis = [
+        ('fa-users', 'Total Users', stats.total_users, '+12%', 'up'),
+        ('fa-file-alt', 'Resume Analyses', stats.total_resumes, '+8%', 'up'),
+        ('fa-robot', 'AI Chats', stats.total_chats, '+24%', 'up'),
+        ('fa-bullseye', 'Placement Predictions', stats.total_placements, '+5%', 'up'),
+        ('fa-chart-line', 'Avg ATS Score', stats.avg_ats, '+3%', 'up'),
+        ('fa-star', 'Avg Resume Score', stats.avg_resume, '+2%', 'up'),
+        ('fa-trophy', 'Avg Placement Score', stats.avg_placement, '+6%', 'up'),
+        ('fa-microphone', 'Interview Sessions', stats.total_interviews, '+10%', 'up'),
+        ('fa-brain', 'Skill Gap Analyses', stats.total_skill_gaps, '+7%', 'up'),
+        ('fa-map', 'Career Roadmaps', stats.total_roadmaps, '+9%', 'up'),
+        ('fa-signal', 'Active Users', stats.active_today, '+4%', 'up'),
+    ] %}
+    {% for icon, label, value, growth, direction in kpis %}
+    <div class="admin-kpi-card">
+        <div class="kpi-icon"><i class="fas {{ icon }}"></i></div>
+        <div class="kpi-value">{{ value }}</div>
+        <div class="kpi-label">{{ label }}</div>
+        <div class="kpi-growth {{ direction }}"><i class="fas fa-arrow-{{ 'up' if direction == 'up' else 'down' }}"></i> {{ growth }}</div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="admin-charts-grid">
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-user-plus"></i> Monthly User Registrations</h3>
+        <div class="chart-container"><canvas id="chartMonthlyRegs"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-signal"></i> Daily Active Users</h3>
+        <div class="chart-container"><canvas id="chartDailyActive"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-file-upload"></i> Resume Upload Trends</h3>
+        <div class="chart-container"><canvas id="chartResumeTrends"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-percentage"></i> Average ATS Score</h3>
+        <div class="chart-container"><canvas id="chartATS"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-chart-pie"></i> Placement Score Distribution</h3>
+        <div class="chart-container"><canvas id="chartPlacement"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-comments"></i> AI Chat Usage</h3>
+        <div class="chart-container"><canvas id="chartChatUsage"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-th-large"></i> Most Used Modules</h3>
+        <div class="chart-container"><canvas id="chartModules"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-microphone-alt"></i> Interview Performance</h3>
+        <div class="chart-container"><canvas id="chartInterview"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-exclamation-circle"></i> Most Missing Skills</h3>
+        <div class="chart-container"><canvas id="chartMissingSkills"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-university"></i> Top Colleges</h3>
+        <div class="chart-container"><canvas id="chartColleges"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3><i class="fas fa-percentage"></i> ATS Score Distribution</h3>
+        <div class="chart-container"><canvas id="chartATSDist"></canvas></div>
+    </div>
+</div>
+
+<script>
+window.adminChartData = {{ charts | tojson }};
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/admin-charts.js') }}"></script>
+{% endblock %}

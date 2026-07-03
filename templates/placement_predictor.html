@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | Placement Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/placement_predictor.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="dashboard-shell">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">🤖 AI Chat</a></li>
+                <li><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li class="active"><a href="{{ url_for('placement_predictor') }}">🎯 Placement Predictor</a></li>
+            </ul>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <section class="hero-card">
+            <div>
+                <h1>Placement Predictor</h1>
+                <p>Complete the form and Bodhini AI will generate a polished placement readiness report on the next page.</p>
+            </div>
+        </section>
+
+        <section class="form-card">
+            {% if error %}
+            <div class="alert alert-warning">{{ error }}</div>
+            {% endif %}
+
+            <form id="predictor-form" method="POST">
+                <h2>Student Profile</h2>
+                <div class="form-grid">
+                    <div><label>Student Name</label><input name="student_name" required></div>
+                    <div><label>College Name</label><input name="college_name" required></div>
+                    <div><label>Branch</label><input name="branch" required></div>
+                    <div><label>Current Year</label><input name="current_year" required></div>
+                    <div><label>City</label><input name="city" required></div>
+                    <div><label>CGPA</label><input name="cgpa" required></div>
+                    <div><label>10th %</label><input name="tenth_percentage" required></div>
+                    <div><label>12th %</label><input name="twelfth_percentage" required></div>
+                    <div><label>Current Backlogs</label><input name="backlogs" required></div>
+                </div>
+
+                <h3>Skills (rating 1-10)</h3>
+                <div class="form-grid skill-grid">
+                    <div><label>Python</label><select name="python"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Java</label><select name="java"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>C++</label><select name="cpp"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>SQL</label><select name="sql"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>JavaScript</label><select name="javascript"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>HTML</label><select name="html"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>CSS</label><select name="css"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>React</label><select name="react"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Node.js</label><select name="nodejs"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Flask</label><select name="flask"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Django</label><select name="django"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Machine Learning</label><select name="ml"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Deep Learning</label><select name="dl"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Data Structures</label><select name="dsa"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Algorithms</label><select name="algorithms"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Operating Systems</label><select name="os"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>DBMS</label><select name="dbms"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Computer Networks</label><select name="cn"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Cloud Computing</label><select name="cloud"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>AWS</label><select name="aws"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Docker</label><select name="docker"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Git</label><select name="git"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>GitHub</label><select name="github"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                </div>
+
+                <h3>Communication & Experience (rating 1-10)</h3>
+                <div class="form-grid">
+                    <div><label>Communication Skills</label><select name="communication"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Leadership</label><select name="leadership"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Teamwork</label><select name="teamwork"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Presentation Skills</label><select name="presentation"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Confidence</label><select name="confidence"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Projects Completed</label><select name="projects_completed"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Internships</label><select name="internships"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Hackathons</label><select name="hackathons"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Certifications</label><select name="certifications"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Coding Competitions</label><select name="coding_competitions"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>Open Source Contributions</label><select name="open_source"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+                    <div><label>GitHub Profile URL</label><input type="url" name="github_profile" placeholder="https://github.com/yourprofile"></div>
+                    <div><label>LinkedIn Profile URL</label><input type="url" name="linkedin_profile" placeholder="https://linkedin.com/in/yourprofile"></div>
+                    <div><label>Career Goal</label>
+                        <select name="career_goal">
+                            <option>Software Engineer</option>
+                            <option>AI Engineer</option>
+                            <option>Data Scientist</option>
+                            <option>Web Developer</option>
+                            <option>Cloud Engineer</option>
+                            <option>Cyber Security Engineer</option>
+                            <option>Full Stack Developer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="submit" class="predict-btn" id="predict-btn">Predict Placement</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/placement_predictor.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% extends 'admin/base.html' %}
+{% block title %}Settings{% endblock %}
+{% block page_title %}Admin Settings{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="tabGeneral">General</button>
+        <button class="admin-tab" data-tab="tabProfile">Profile</button>
+        <button class="admin-tab" data-tab="tabPassword">Password</button>
+        <button class="admin-tab" data-tab="tabEmail">Email</button>
+        <button class="admin-tab" data-tab="tabBackup">Backup</button>
+    </div>
+
+    <div id="tabGeneral" class="admin-tab-panel active">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="general">
+            <div class="admin-form-grid">
+                <div class="admin-form-group"><label>Website Name</label><input type="text" name="website_name" value="{{ settings.website_name }}"></div>
+                <div class="admin-form-group"><label>AI API Key (Groq)</label><input type="password" name="ai_api_key" value="{{ settings.ai_api_key or '' }}" placeholder="gsk_..."></div>
+                <div class="admin-form-group"><label>Primary Color</label><input type="color" name="theme_primary" value="{{ settings.theme_primary or '#2563eb' }}"></div>
+                <div class="admin-form-group"><label>Secondary Color</label><input type="color" name="theme_secondary" value="{{ settings.theme_secondary or '#4f46e5' }}"></div>
+                <div class="admin-form-group"><label>Logo</label><input type="file" name="logo" accept="image/*"></div>
+            </div>
+            <div class="admin-form-actions"><button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-save"></i> Save Settings</button></div>
+        </form>
+    </div>
+
+    <div id="tabProfile" class="admin-tab-panel">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="profile">
+            <div class="admin-form-grid">
+                <div class="admin-form-group"><label>Username</label><input type="text" name="username" value="{{ admin_user.username }}"></div>
+                <div class="admin-form-group"><label>Email</label><input type="email" name="email" value="{{ admin_user.email }}"></div>
+                <div class="admin-form-group"><label>Profile Picture</label><input type="file" name="profile_picture" accept="image/*"></div>
+            </div>
+            <div class="admin-form-actions"><button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-save"></i> Update Profile</button></div>
+        </form>
+    </div>
+
+    <div id="tabPassword" class="admin-tab-panel">
+        <form method="POST">
+            <input type="hidden" name="action" value="password">
+            <div class="admin-form-grid" style="max-width:400px;">
+                <div class="admin-form-group"><label>Current Password</label><input type="password" name="current_password" required></div>
+                <div class="admin-form-group"><label>New Password</label><input type="password" name="new_password" required></div>
+            </div>
+            <div class="admin-form-actions"><button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-key"></i> Change Password</button></div>
+        </form>
+    </div>
+
+    <div id="tabEmail" class="admin-tab-panel">
+        <form method="POST">
+            <input type="hidden" name="action" value="email">
+            <div class="admin-form-grid">
+                <div class="admin-form-group"><label>SMTP Host</label><input type="text" name="smtp_host" value="{{ settings.smtp_host or '' }}"></div>
+                <div class="admin-form-group"><label>SMTP Port</label><input type="text" name="smtp_port" value="{{ settings.smtp_port or '587' }}"></div>
+                <div class="admin-form-group"><label>SMTP Email</label><input type="email" name="smtp_email" value="{{ settings.smtp_email or '' }}"></div>
+                <div class="admin-form-group"><label>SMTP Password</label><input type="password" name="smtp_password" value="{{ settings.smtp_password or '' }}"></div>
+            </div>
+            <div class="admin-form-actions"><button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-envelope"></i> Save Email Config</button></div>
+        </form>
+    </div>
+
+    <div id="tabBackup" class="admin-tab-panel">
+        <div class="admin-form-grid">
+            <div>
+                <h3 style="margin-bottom:12px;">Backup Database</h3>
+                <p style="color:#64748b;margin-bottom:16px;font-size:14px;">Create a snapshot of your SQLite database.</p>
+                <form method="POST"><input type="hidden" name="action" value="backup">
+                    <button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-database"></i> Backup Now</button>
+                </form>
+            </div>
+            <div>
+                <h3 style="margin-bottom:12px;">Restore Database</h3>
+                <p style="color:#64748b;margin-bottom:16px;font-size:14px;">Upload a .db backup file to restore.</p>
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="restore">
+                    <input type="file" name="restore_file" accept=".db" style="margin-bottom:12px;">
+                    <br><button type="submit" class="admin-btn admin-btn-danger" data-confirm="This will overwrite the current database. Continue?"><i class="fas fa-upload"></i> Restore</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

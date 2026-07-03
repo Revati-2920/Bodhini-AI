@@ -1,0 +1,36 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if item else 'Add' }} Event{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'Add' }} Event{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:800px;">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Title *</label><input type="text" name="title" value="{{ item.title if item else '' }}" required></div>
+            <div class="admin-form-group"><label>Type</label>
+                <select name="event_type">
+                    {% for t in ['Placement Drive','Hackathon','Workshop','Webinar','Seminar'] %}
+                    <option value="{{ t }}" {% if item and item.event_type == t %}selected{% endif %}>{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="admin-form-group"><label>Date</label><input type="datetime-local" name="event_date" value="{{ item.event_date if item else '' }}"></div>
+            <div class="admin-form-group"><label>Venue</label><input type="text" name="venue" value="{{ item.venue if item else '' }}"></div>
+            <div class="admin-form-group"><label>Registration Link</label><input type="url" name="registration_link" value="{{ item.registration_link if item else '' }}"></div>
+            <div class="admin-form-group"><label>Status</label>
+                <select name="status">
+                    {% for s in ['Upcoming','Ongoing','Completed','Cancelled'] %}
+                    <option value="{{ s }}" {% if item and item.status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="admin-form-group"><label>Poster</label><input type="file" name="poster" accept="image/*"></div>
+            <div class="admin-form-group" style="grid-column:1/-1;"><label>Description</label><textarea name="description">{{ item.description if item else '' }}</textarea></div>
+        </div>
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-save"></i> Save</button>
+            <a href="{{ url_for('admin.events_list') }}" class="admin-btn admin-btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

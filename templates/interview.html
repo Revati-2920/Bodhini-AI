@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | Interview Prep</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="dashboard">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">🤖 AI Chat</a></li>
+                <li><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li><a href="{{ url_for('placement_predictor') }}">🎯 Placement Predictor</a></li>
+                <li><a href="{{ url_for('career_roadmap') }}">🗺️ Career Roadmap</a></li>
+                <li class="active"><a href="{{ url_for('interview') }}">🎤 Interview Prep</a></li>
+            </ul>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-primary logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content interview-main">
+        <div class="hero-panel">
+            <div>
+                <h1>🎤 AI Interview Preparation</h1>
+                <p>Practice technical and HR interviews with your personal AI interviewer.</p>
+            </div>
+        </div>
+
+        <section class="interview-controls card">
+            <form method="post" class="interview-form">
+                <input type="hidden" name="action" value="start">
+                <div class="control-group">
+                    <label>Interview Type</label>
+                    <select name="interview_type">
+                        <option value="HR Interview" {% if interview_type == 'HR Interview' %}selected{% endif %}>HR Interview</option>
+                        <option value="Technical Interview" {% if interview_type == 'Technical Interview' %}selected{% endif %}>Technical Interview</option>
+                        <option value="Behavioral Interview" {% if interview_type == 'Behavioral Interview' %}selected{% endif %}>Behavioral Interview</option>
+                        <option value="Group Discussion" {% if interview_type == 'Group Discussion' %}selected{% endif %}>Group Discussion</option>
+                        <option value="System Design" {% if interview_type == 'System Design' %}selected{% endif %}>System Design</option>
+                        <option value="Mock Interview" {% if interview_type == 'Mock Interview' %}selected{% endif %}>Mock Interview</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Difficulty</label>
+                    <select name="difficulty">
+                        <option value="Easy" {% if difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                        <option value="Medium" {% if difficulty == 'Medium' %}selected{% endif %}>Medium</option>
+                        <option value="Hard" {% if difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+                        <option value="Expert" {% if difficulty == 'Expert' %}selected{% endif %}>Expert</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Target Company</label>
+                    <input type="text" name="target_company" placeholder="Google, Microsoft, Amazon..." value="{{ target_company }}">
+                </div>
+                <button type="submit" class="btn-primary">▶ Start Interview</button>
+            </form>
+        </section>
+
+        <section class="interview-layout">
+            <div class="conversation-card card">
+                <div class="chat-header">AI Interview Coach</div>
+                <div class="chat-box" id="chat-box">
+                    {% if conversation %}
+                        {% for item in conversation %}
+                            {% if item.role == 'ai' %}
+                                <div class="message ai-message">
+                                    <div class="message-meta">AI Coach</div>
+                                    <div>{{ item.content }}</div>
+                                    {% if item.feedback %}
+                                        <div class="feedback-box">
+                                        <strong>Score:</strong> {{ item.feedback.overall_score }}/10<br>
+                                        <div class="metric-grid">
+                                            <span>Communication: {{ item.feedback.communication }}/10</span>
+                                            <span>Confidence: {{ item.feedback.confidence }}/10</span>
+                                            <span>Technical: {{ item.feedback.technical_accuracy }}/10</span>
+                                            <span>Grammar: {{ item.feedback.grammar }}/10</span>
+                                        </div>
+                                        <strong>Body Language:</strong> {{ item.feedback.body_language_tips | join(', ') }}<br>
+                                        <strong>STAR Method:</strong> {{ item.feedback.star_method_usage }}<br>
+                                        <strong>Strengths:</strong> {{ item.feedback.strengths | join(', ') }}<br>
+                                        <strong>Improvements:</strong> {{ item.feedback.weaknesses | join(', ') }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="message user-message">
+                                    <div class="message-meta">You</div>
+                                    <div>{{ item.content }}</div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="message ai-message">
+                            <div class="message-meta">AI Coach</div>
+                            <div>Tell me about yourself.</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if not interview_completed %}
+                <form method="post" class="chat-form" id="answer-form">
+                    <input type="hidden" name="action" value="answer">
+                    <textarea name="answer" id="answer" rows="4" placeholder="Type your answer here..." required></textarea>
+                    <button type="submit" class="btn-primary">Submit Answer</button>
+                </form>
+                {% endif %}
+            </div>
+
+            <aside class="side-panel">
+                <div class="card stat-card">
+                    <h3>📊 Interview Stats</h3>
+                    <p><strong>Questions:</strong> {{ question_count }}</p>
+                    <p><strong>Status:</strong> {{ 'Completed' if interview_completed else 'In Progress' }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>⚡ Quick Practice</h3>
+                    <ul class="quick-list">
+                        {% for q in common_questions %}
+                        <li>• {{ q }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>🧠 Recent History</h3>
+                    <ul class="quick-list">
+                        {% for item in history %}
+                        <li>• {{ item.interview_type }} · {{ item.company }} · {{ item.overall_score }}/10</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% if interview_summary %}
+                <div class="card">
+                    <h3>🏁 Interview Summary</h3>
+                    <div class="summary-grid">
+                        <div><strong>Overall</strong><br>{{ interview_summary.overall_score }}/10</div>
+                        <div><strong>Confidence</strong><br>{{ interview_summary.confidence }}/10</div>
+                        <div><strong>Tech</strong><br>{{ interview_summary.technical_knowledge }}/10</div>
+                        <div><strong>Communication</strong><br>{{ interview_summary.communication }}/10</div>
+                    </div>
+                    <ul class="quick-list">
+                        {% for item in interview_summary.strengths %}<li>✅ {{ item }}</li>{% endfor %}
+                        {% for item in interview_summary.improvements %}<li>⚠️ {{ item }}</li>{% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </aside>
+        </section>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+</body>
+</html>

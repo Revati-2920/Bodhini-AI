@@ -1,0 +1,44 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Companies{% endblock %}
+{% block page_title %}Company Management{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-building"></i> Companies</h2>
+        <div class="admin-toolbar">
+            <form method="GET"><input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}"><button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button></form>
+            <a href="{{ url_for('admin.company_form') }}" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-plus"></i> Add Company</a>
+        </div>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Logo</th><th>Name</th><th>Package</th><th>Location</th><th>Deadline</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{% if item.logo %}<img src="{{ url_for('static', filename=item.logo) }}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">{% else %}—{% endif %}</td>
+                    <td><strong>{{ item.name }}</strong></td>
+                    <td>{{ item.package or '—' }}</td>
+                    <td>{{ item.location or '—' }}</td>
+                    <td>{{ item.application_deadline or '—' }}</td>
+                    <td><span class="status-badge {% if item.is_active %}status-active{% else %}status-disabled{% endif %}">{{ 'Active' if item.is_active else 'Inactive' }}</span></td>
+                    <td>
+                        <a href="{{ url_for('admin.company_form', item_id=item.id) }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{ url_for('admin.company_delete', item_id=item.id) }}" style="display:inline;">
+                            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" data-confirm="Delete {{ item.name }}?"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-building"></i><h3>No Companies</h3><p><a href="{{ url_for('admin.company_form') }}" class="admin-btn admin-btn-primary admin-btn-sm">Add First Company</a></p></div>
+    {% endif %}
+</div>
+{% endblock %}

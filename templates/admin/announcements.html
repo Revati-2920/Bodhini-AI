@@ -1,0 +1,43 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Announcements{% endblock %}
+{% block page_title %}Announcements{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+        <div class="admin-toolbar">
+            <form method="GET"><input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}"><button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button></form>
+            <a href="{{ url_for('admin.announcement_form') }}" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-plus"></i> Publish</a>
+        </div>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Title</th><th>Priority</th><th>Expiry</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td><strong>{{ item.title }}</strong></td>
+                    <td><span class="status-badge priority-{{ item.priority|lower if item.priority else 'normal' }}">{{ item.priority or 'Normal' }}</span></td>
+                    <td>{{ item.expiry_date or '—' }}</td>
+                    <td><span class="status-badge {% if item.is_active %}status-active{% else %}status-disabled{% endif %}">{{ 'Active' if item.is_active else 'Inactive' }}</span></td>
+                    <td>{{ item.created_at or '—' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.announcement_form', item_id=item.id) }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{ url_for('admin.announcement_delete', item_id=item.id) }}" style="display:inline;">
+                            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" data-confirm="Delete announcement?"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-bullhorn"></i><h3>No Announcements</h3><p><a href="{{ url_for('admin.announcement_form') }}" class="admin-btn admin-btn-primary admin-btn-sm">Publish Announcement</a></p></div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Chat Logs{% endblock %}
+{% block page_title %}AI Chat Logs{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-comments"></i> AI Chat Logs</h2>
+        <div class="admin-toolbar">
+            <form method="GET" style="display:flex;gap:10px;flex-wrap:wrap;">
+                <input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}">
+                <input type="date" name="date_from" class="admin-select" value="{{ date_from }}">
+                <input type="date" name="date_to" class="admin-select" value="{{ date_to }}">
+                <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button>
+            </form>
+            <div style="display:flex;gap:6px;">
+                <a href="{{ url_for('admin.chat_logs_export', fmt='csv') }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-download"></i> Export</a>
+            </div>
+        </div>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>User</th><th>Prompt</th><th>AI Response</th><th>Module</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.user.username if item.user else '—' }}</td>
+                    <td style="max-width:200px;">{{ (item.prompt or '')[:120] }}{% if item.prompt and item.prompt|length > 120 %}…{% endif %}</td>
+                    <td style="max-width:250px;">{{ (item.response or '')[:150] }}{% if item.response and item.response|length > 150 %}…{% endif %}</td>
+                    <td><span class="status-badge priority-normal">{{ item.module_used or 'AI Chat' }}</span></td>
+                    <td>{{ item.created_at or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-comments"></i><h3>No Chat Logs</h3><p>AI conversations will be logged here.</p></div>
+    {% endif %}
+</div>
+{% endblock %}

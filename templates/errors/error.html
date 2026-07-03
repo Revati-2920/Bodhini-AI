@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ code }} | Bodhini AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+<div class="error-page">
+    <div>
+        <div class="error-code">{{ code }}</div>
+        <h2>{{ title }}</h2>
+        <p>{{ message }}</p>
+        <a href="{{ url_for('dashboard') }}" class="admin-btn admin-btn-primary"><i class="fas fa-home"></i> Go to Dashboard</a>
+        {% if code == 403 %}
+        <a href="{{ url_for('admin.admin_login') }}" class="admin-btn admin-btn-outline" style="margin-left:12px;"><i class="fas fa-lock"></i> Admin Login</a>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

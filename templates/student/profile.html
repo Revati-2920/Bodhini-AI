@@ -1,0 +1,39 @@
+{% extends 'student/base.html' %}
+{% block title %}Profile | Bodhini AI{% endblock %}
+{% block content %}
+<h1>My Profile</h1>
+<p class="subtitle">Manage your career profile used across all AI modules</p>
+
+<div class="profile-header glass-card">
+    {% if user.profile_picture and user.profile_picture != 'default-avatar.png' %}
+    <img src="{{ url_for('static', filename=user.profile_picture) }}" class="profile-avatar" alt="">
+    {% else %}
+    <div class="profile-avatar-placeholder">{{ user.username[0]|upper }}</div>
+    {% endif %}
+    <div>
+        <h2>{{ user.username }}</h2>
+        <p style="color:#94a3b8;">{{ user.email }}</p>
+        <span class="grade-badge" style="font-size:16px;margin-top:8px;display:inline-block;">{{ scores.grade }} · {{ scores.overall }}/100</span>
+    </div>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="premium-form glass-card">
+    <div class="form-grid">
+        <div class="form-group"><label>Full Name</label><input type="text" name="username" value="{{ user.username }}" required></div>
+        <div class="form-group"><label>College</label><input type="text" name="college" value="{{ user.college or '' }}"></div>
+        <div class="form-group"><label>Department</label><input type="text" name="department" value="{{ user.department or '' }}"></div>
+        <div class="form-group"><label>Year</label><input type="text" name="year" value="{{ user.year or '' }}" placeholder="e.g. 3rd Year"></div>
+        <div class="form-group"><label>CGPA</label><input type="text" name="cgpa" value="{{ user.cgpa or '' }}"></div>
+        <div class="form-group"><label>Dream Company</label><input type="text" name="dream_company" value="{{ user.dream_company or '' }}"></div>
+        <div class="form-group"><label>Preferred Domain</label><input type="text" name="preferred_domain" value="{{ user.preferred_domain or '' }}" placeholder="e.g. Full Stack, Data Science"></div>
+        <div class="form-group"><label>LinkedIn</label><input type="url" name="linkedin" value="{{ user.linkedin or '' }}"></div>
+        <div class="form-group"><label>GitHub</label><input type="url" name="github" value="{{ user.github or '' }}"></div>
+        <div class="form-group"><label>Profile Photo</label><input type="file" name="profile_picture" accept="image/*"></div>
+        <div class="form-group"><label>Resume (PDF/DOCX)</label><input type="file" name="resume" accept=".pdf,.docx"></div>
+        <div class="form-group" style="grid-column:1/-1;"><label>Skills (comma separated)</label><textarea name="skills" rows="2">{{ user.skills or '' }}</textarea></div>
+        <div class="form-group" style="grid-column:1/-1;"><label>Interests</label><textarea name="interests" rows="2">{{ user.interests or '' }}</textarea></div>
+        <div class="form-group" style="grid-column:1/-1;"><label>Bio</label><textarea name="bio" rows="3">{{ user.bio or '' }}</textarea></div>
+    </div>
+    <button type="submit" class="btn-gradient" style="margin-top:16px;"><i class="fas fa-save"></i> Save Profile</button>
+</form>
+{% endblock %}

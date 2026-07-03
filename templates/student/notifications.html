@@ -1,0 +1,26 @@
+{% extends 'student/base.html' %}
+{% block title %}Notifications | Bodhini AI{% endblock %}
+{% block content %}
+<h1><i class="fas fa-bell"></i> Notifications</h1>
+<form method="POST" action="{{ url_for('student.notifications_read_all') }}" style="margin-bottom:20px;">
+    <button type="submit" class="btn-gradient" style="font-size:13px;padding:8px 16px;">Mark All Read</button>
+</form>
+{% for n in items %}
+<div class="glass-card" style="margin-bottom:12px;{% if not n.is_read %}border-left:4px solid #2563eb;{% endif %}">
+    <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div>
+            <strong>{{ n.title }}</strong>
+            <p style="color:#94a3b8;font-size:14px;margin-top:4px;">{{ n.message }}</p>
+            <span style="font-size:12px;color:#64748b;">{{ n.created_at }}</span>
+        </div>
+        {% if not n.is_read %}
+        <form method="POST" action="{{ url_for('student.notification_read', nid=n.id) }}">
+            <button type="submit" class="btn-gradient" style="font-size:11px;padding:6px 12px;">Mark Read</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>No Notifications</h3></div>
+{% endfor %}
+{% endblock %}

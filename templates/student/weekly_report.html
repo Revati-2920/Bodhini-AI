@@ -1,0 +1,37 @@
+{% extends 'student/base.html' %}
+{% block title %}Weekly Report | Bodhini AI{% endblock %}
+{% block content %}
+<h1><i class="fas fa-file-alt"></i> Weekly AI Report</h1>
+<p class="subtitle">Generated {{ report.generated_at }}</p>
+
+<div class="career-score-hero glass-card">
+    <div>
+        <h2>Overall Score: {{ report.scores.overall }}/100</h2>
+        <span class="grade-badge">{{ report.grade }}</span>
+    </div>
+    <a href="{{ url_for('student.weekly_report_download') }}" class="btn-gradient"><i class="fas fa-download"></i> Download PDF</a>
+</div>
+
+<div class="score-grid" style="margin-bottom:32px;">
+    <div class="score-mini"><h3>{{ report.resume_improvements }}</h3><p>Resumes This Week</p></div>
+    <div class="score-mini"><h3>{{ report.ats_progress }}</h3><p>ATS Score</p></div>
+    <div class="score-mini"><h3>{{ report.placement_readiness }}</h3><p>Placement Ready</p></div>
+    <div class="score-mini"><h3>{{ report.interview_practice }}</h3><p>Interviews</p></div>
+    <div class="score-mini"><h3>{{ report.skills_learned }}</h3><p>Skill Match</p></div>
+    <div class="score-mini"><h3>{{ report.courses_completed }}</h3><p>Certs Added</p></div>
+</div>
+
+<h2>Recommendations</h2>
+<div class="rec-grid">
+    {% for rec in report.recommendations %}
+    <a href="{{ rec.link }}" class="rec-card"><div class="rec-icon">{{ rec.icon }}</div><h4>{{ rec.title }}</h4><p>{{ rec.desc }}</p></a>
+    {% endfor %}
+</div>
+
+<h2 style="margin-top:24px;">Recent Activity</h2>
+<div class="timeline">
+    {% for act in report.activities %}
+    <div class="timeline-item"><div class="tl-date">{{ act.date }}</div><div class="tl-text">{{ act.activity }}</div></div>
+    {% endfor %}
+</div>
+{% endblock %}

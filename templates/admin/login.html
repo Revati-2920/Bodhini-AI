@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Bodhini AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+<div class="admin-login-page">
+    <div class="admin-login-card">
+        <div class="logo-title">Bodhini AI</div>
+        <div class="logo-sub">Premium Admin Panel</div>
+
+        <div id="toastContainer" class="admin-toast-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <span data-flash="{{ category }}" style="display:none">{{ message }}</span>
+            {% endfor %}
+            {% endwith %}
+        </div>
+
+        <form method="POST" action="{{ url_for('admin.admin_login') }}">
+            <div class="admin-form-group" style="margin-bottom:16px;">
+                <label>Email or Username</label>
+                <input type="text" name="email" required placeholder="admin@bodhini.ai" autofocus>
+            </div>
+            <div class="admin-form-group" style="margin-bottom:24px;">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Enter password">
+            </div>
+            <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;justify-content:center;padding:14px;">
+                <i class="fas fa-lock"></i> Sign In to Admin
+            </button>
+        </form>
+
+        <p style="text-align:center;margin-top:24px;font-size:13px;color:#64748b;">
+            <a href="{{ url_for('dashboard') }}" style="color:#2563eb;text-decoration:none;">← Back to Student Dashboard</a>
+        </p>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

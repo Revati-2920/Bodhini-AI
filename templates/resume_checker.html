@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | ATS Resume Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resume.css') }}">
+</head>
+<body>
+<div class="dashboard-shell">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">AI Chat</a></li>
+                <li class="active"><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li><a href="{{ url_for('placement_predictor') }}">Placement Predictor</a></li>
+                <li><a href="{{ url_for('career_roadmap') }}">Career Roadmap</a></li>
+                <li><a href="{{ url_for('interview') }}">Interview Prep</a></li>
+                <li><a href="{{ url_for('skill_gap') }}">Skill Gap Analyzer</a></li>
+            </ul>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content ats-main">
+        <section class="ats-hero">
+            <div>
+                <span class="eyebrow">Premium ATS scanner</span>
+                <h1>ATS Resume Checker</h1>
+                <p>Analyze your resume against Applicant Tracking Systems used by top companies.</p>
+            </div>
+            <div class="hero-metrics">
+                <div><strong>PDF</strong><span>DOCX</span></div>
+                <div><strong>5 MB</strong><span>Max size</span></div>
+                <div><strong>AI</strong><span>Suggestions</span></div>
+            </div>
+        </section>
+
+        {% if error %}
+        <div class="ats-alert">{{ error }}</div>
+        {% endif %}
+
+        <section class="upload-card premium-card">
+            <div class="section-title">
+                <div>
+                    <span class="eyebrow">Upload Resume</span>
+                    <h2>Scan your resume</h2>
+                </div>
+                <span class="status-pill">Secure upload</span>
+            </div>
+
+            <form id="ats-upload-form" method="POST" enctype="multipart/form-data" class="upload-form">
+                <div class="control-row">
+                    <label>
+                        Target Role
+                        <select name="target_role">
+                            {% for role in target_roles %}
+                            <option value="{{ role }}" {% if selected_role == role %}selected{% endif %}>{{ role }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+
+                <label class="upload-area" for="resume-file" id="drop-zone">
+                    <input id="resume-file" type="file" name="resume" accept=".pdf,.docx" required>
+                    <div class="upload-icon" id="upload-icon">DOC</div>
+                    <h3 id="upload-title">Drag and drop your resume</h3>
+                    <p id="upload-text">or choose a PDF/DOCX file up to 5 MB</p>
+                    <span class="upload-btn">Choose File</span>
+                    <div id="file-name" class="filename-pill hidden">No file selected</div>
+                </label>
+
+                <div class="upload-meta sticky-actions">
+                    <div id="selection-status" class="selection-status">No resume selected</div>
+                    <div class="action-row">
+                        <button type="reset" class="ghost-btn" id="reset-btn">Reset</button>
+                        <button type="submit" class="analyze-btn" id="analyze-btn" disabled>Analyze Resume</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="loading-panel hidden" id="loading-panel">
+            <div class="loader-ring"></div>
+            <h2 id="loading-text">Scanning Resume...</h2>
+            <div class="progress-track"><span id="progress-bar"></span></div>
+            <p>Reading sections, matching keywords, calculating ATS score, and generating suggestions.</p>
+        </section>
+
+        <section class="premium-card history-card">
+            <div class="section-title">
+                <div>
+                    <span class="eyebrow">Dashboard History</span>
+                    <h2>Previous ATS analyses</h2>
+                </div>
+            </div>
+
+            {% if recent_reviews %}
+            <div class="history-table-wrap">
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>Resume Name</th>
+                        <th>Date</th>
+                        <th>ATS Score</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in recent_reviews %}
+                    <tr>
+                        <td>{{ item.resume_name }}</td>
+                        <td>{{ item.created_at }}</td>
+                        <td><span class="score-badge">{{ item.ats_score }}%</span></td>
+                        <td><a href="{{ url_for('ats_resume_result', review_id=item.id) }}">View Again</a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty-copy">No ATS reports yet. Upload your first resume to generate a premium report.</p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/resume_checker.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Users{% endblock %}
+{% block page_title %}User Management{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-users"></i> All Users</h2>
+        <div class="admin-toolbar">
+            <form class="admin-search-form" method="GET" style="display:flex;gap:10px;flex-wrap:wrap;">
+                <input type="text" name="q" class="admin-search" placeholder="Search users..." value="{{ q }}">
+                <select name="status" class="admin-select">
+                    <option value="">All Status</option>
+                    <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
+                    <option value="disabled" {% if status == 'disabled' %}selected{% endif %}>Disabled</option>
+                </select>
+                <input type="text" name="department" class="admin-search" placeholder="Department" value="{{ department }}" style="min-width:140px;">
+                <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i> Search</button>
+            </form>
+            <div style="display:flex;gap:6px;">
+                <a href="{{ url_for('admin.users_export', fmt='csv') }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-file-csv"></i> CSV</a>
+                <a href="{{ url_for('admin.users_export', fmt='excel') }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-file-excel"></i> Excel</a>
+                <a href="{{ url_for('admin.users_export', fmt='pdf') }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-file-pdf"></i> PDF</a>
+            </div>
+        </div>
+    </div>
+
+    {% if users %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Profile</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>College</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>CGPA</th>
+                    <th>Registered</th>
+                    <th>Last Login</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        {% if user.profile_picture and user.profile_picture != 'default-avatar.png' %}
+                        <img src="{{ url_for('static', filename=user.profile_picture) }}" class="admin-avatar" alt="">
+                        {% else %}
+                        <div class="admin-avatar" style="display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;">{{ user.username[0]|upper }}</div>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ user.username }}</strong></td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.college or '—' }}</td>
+                    <td>{{ user.department or '—' }}</td>
+                    <td>{{ user.year or '—' }}</td>
+                    <td>{{ user.cgpa or '—' }}</td>
+                    <td>{{ user.created_at or '—' }}</td>
+                    <td>{{ user.last_login or '—' }}</td>
+                    <td>
+                        <span class="status-badge {% if user.is_active %}status-active{% else %}status-disabled{% endif %}">
+                            {{ 'Active' if user.is_active else 'Disabled' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                            <a href="{{ url_for('admin.user_view', user_id=user.id) }}" class="admin-btn admin-btn-outline admin-btn-sm admin-btn-icon" title="View"><i class="fas fa-eye"></i></a>
+                            <a href="{{ url_for('admin.user_edit', user_id=user.id) }}" class="admin-btn admin-btn-outline admin-btn-sm admin-btn-icon" title="Edit"><i class="fas fa-edit"></i></a>
+                            <form method="POST" action="{{ url_for('admin.user_toggle', user_id=user.id) }}" style="display:inline;">
+                                <button type="submit" class="admin-btn admin-btn-outline admin-btn-sm admin-btn-icon" title="Toggle"><i class="fas fa-ban"></i></button>
+                            </form>
+                            <form method="POST" action="{{ url_for('admin.user_reset_password', user_id=user.id) }}" style="display:inline;">
+                                <button type="submit" class="admin-btn admin-btn-outline admin-btn-sm admin-btn-icon" title="Reset Password"><i class="fas fa-key"></i></button>
+                            </form>
+                            <form method="POST" action="{{ url_for('admin.user_delete', user_id=user.id) }}" style="display:inline;">
+                                <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm admin-btn-icon" data-confirm="Delete user {{ user.username }}? This cannot be undone." title="Delete"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty">
+        <i class="fas fa-users"></i>
+        <h3>No Users Found</h3>
+        <p>Try adjusting your search filters or wait for new registrations.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

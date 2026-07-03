@@ -1,0 +1,16 @@
+<div class="feedback-widget">
+    <h4><i class="fas fa-star"></i> Was this helpful?</h4>
+    <form method="POST" action="{{ url_for('student.submit_feedback') }}">
+        <input type="hidden" name="module" value="{{ module_name or 'general' }}">
+        <div class="star-rating">
+            {% for i in range(5, 0, -1) %}
+            <input type="radio" name="rating" id="star{{ i }}_{{ module_name }}" value="{{ i }}" {% if i == 5 %}checked{% endif %}>
+            <label for="star{{ i }}_{{ module_name }}">★</label>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+            <textarea name="feedback" rows="2" placeholder="Your feedback..." style="width:100%;padding:10px;background:#334155;border-radius:8px;border:1px solid rgba(255,255,255,0.1);color:#fff;"></textarea>
+        </div>
+        <button type="submit" class="btn-gradient" style="font-size:12px;padding:8px 16px;">Submit Feedback</button>
+    </form>
+</div>

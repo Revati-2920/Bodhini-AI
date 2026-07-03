@@ -1,0 +1,152 @@
+{% extends 'student/base.html' %}
+{% block title %}Dashboard | Bodhini AI{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ username }} 👋</h1>
+<p class="subtitle">Your AI-powered career development platform</p>
+
+{% if announcements %}
+<div class="glass-card" style="margin-bottom:24px;">
+    <h2 style="margin-bottom:14px;"><i class="fas fa-bullhorn"></i> Announcements</h2>
+    {% for ann in announcements %}
+    <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <strong>{{ ann.title }}</strong>
+        {% if ann.priority == 'High' %}<span style="color:#ef4444;font-size:12px;"> • High Priority</span>{% endif %}
+        <p style="color:#94a3b8;font-size:14px;margin-top:4px;">{{ ann.description }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Career Score Hero -->
+<div class="career-score-hero glass-card">
+    <div class="score-ring" style="--score: {{ career_scores.overall }};">
+        <div class="inner">
+            <h2 class="animate-counter" data-target="{{ career_scores.overall }}">{{ career_scores.overall }}</h2>
+            <span>/ 100</span>
+        </div>
+    </div>
+    <div>
+        <h2 style="margin-bottom:8px;">Overall Career Score</h2>
+        <span class="grade-badge">{{ career_scores.grade }}</span>
+        <div class="xp-bar-wrap" style="max-width:320px;margin-top:16px;">
+            <div class="xp-label"><span>Level {{ gamification.level }}</span><span>{{ gamification.xp }} XP</span></div>
+            <div class="xp-bar"><div class="xp-fill" style="width:{{ (gamification.xp % 100) }}%;"></div></div>
+        </div>
+        {% if badges %}
+        <div class="badge-row">
+            {% for b in badges %}<span class="badge-item">{{ b.icon }} {{ b.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="score-grid">
+        <div class="score-mini"><h3>{{ career_scores.resume_score }}</h3><p>Resume</p></div>
+        <div class="score-mini"><h3>{{ career_scores.ats_score }}</h3><p>ATS</p></div>
+        <div class="score-mini"><h3>{{ career_scores.placement_score }}</h3><p>Placement</p></div>
+        <div class="score-mini"><h3>{{ career_scores.interview_score }}</h3><p>Interview</p></div>
+        <div class="score-mini"><h3>{{ career_scores.skill_score }}</h3><p>Skills</p></div>
+        <div class="score-mini"><h3>{{ gamification.daily_streak or 0 }}</h3><p>Day Streak 🔥</p></div>
+    </div>
+</div>
+
+<!-- Recommendations -->
+<h2 style="margin-bottom:16px;"><i class="fas fa-lightbulb"></i> Today's Recommendations</h2>
+<div class="rec-grid">
+    {% for rec in recommendations %}
+    <a href="{{ rec.link }}" class="rec-card">
+        <div class="rec-icon">{{ rec.icon }}</div>
+        <h4>{{ rec.title }}</h4>
+        <p>{{ rec.desc }}</p>
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Progress Charts -->
+<h2 style="margin-bottom:16px;"><i class="fas fa-chart-area"></i> Your Progress</h2>
+<div class="charts-grid">
+    <div class="chart-card"><h3>Resume / ATS Growth</h3><div class="chart-wrap"><canvas id="chartResume"></canvas></div></div>
+    <div class="chart-card"><h3>Placement Readiness</h3><div class="chart-wrap"><canvas id="chartPlacement"></canvas></div></div>
+    <div class="chart-card"><h3>Interview Practice</h3><div class="chart-wrap"><canvas id="chartInterview"></canvas></div></div>
+    <div class="chart-card"><h3>Skill Development</h3><div class="chart-wrap"><canvas id="chartSkill"></canvas></div></div>
+    <div class="chart-card"><h3>Career Score Trend</h3><div class="chart-wrap"><canvas id="chartCareer"></canvas></div></div>
+</div>
+
+<!-- Quick Actions -->
+<div class="dashboard-grid">
+    <a href="{{ url_for('chat') }}" class="dashboard-card-link"><div class="card"><h3>🤖 AI Chat</h3><p>Ask career questions instantly.</p></div></a>
+    <a href="{{ url_for('resume') }}" class="dashboard-card-link"><div class="card"><h3>📄 ATS Resume</h3><p>Scan and improve your resume.</p></div></a>
+    <a href="{{ url_for('placement_predictor') }}" class="dashboard-card-link"><div class="card"><h3>🎯 Placement</h3><p>Predict placement chances.</p></div></a>
+    <a href="{{ url_for('career_roadmap') }}" class="dashboard-card-link"><div class="card"><h3>🗺️ Roadmap</h3><p>Personalized learning plan.</p></div></a>
+    <a href="{{ url_for('interview') }}" class="dashboard-card-link"><div class="card"><h3>🎤 Interview</h3><p>Mock interview practice.</p></div></a>
+    <a href="{{ url_for('skill_gap') }}" class="dashboard-card-link"><div class="card"><h3>🧠 Skill Gap</h3><p>Discover missing skills.</p></div></a>
+    <a href="{{ url_for('student.companies') }}" class="dashboard-card-link"><div class="card"><h3>🏢 Companies</h3><p>Prepare for top recruiters.</p></div></a>
+    <a href="{{ url_for('student.weekly_report') }}" class="dashboard-card-link"><div class="card"><h3>📊 Weekly Report</h3><p>Download your progress report.</p></div></a>
+</div>
+
+<!-- Activity Timeline -->
+<div class="prediction-section" style="margin-top:32px;">
+    <h2><i class="fas fa-history"></i> Activity Timeline</h2>
+    <div class="timeline">
+        {% for act in activities %}
+        <div class="timeline-item">
+            <div class="tl-date">{{ act.date }}</div>
+            <div class="tl-text">{{ act.activity }}</div>
+            <span class="high" style="font-size:12px;">{{ act.status }}</span>
+        </div>
+        {% else %}
+        <div class="empty-state"><i class="fas fa-clock"></i><p>Start using AI modules to see your activity here.</p></div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Recent ATS History -->
+<div class="prediction-section">
+    <h2>ATS Resume History</h2>
+    <table class="prediction-table">
+        <tr><th>Resume</th><th>Date</th><th>ATS Score</th><th>Action</th></tr>
+        {% for review in resume_reviews %}
+        <tr>
+            <td>{{ review.resume_name }}</td>
+            <td>{{ review.created_at }}</td>
+            <td class="{% if review.ats_score >= 75 %}high{% elif review.ats_score >= 60 %}medium{% else %}low{% endif %}">{{ review.ats_score }}%</td>
+            <td>
+                <a href="{{ url_for('ats_resume_result', review_id=review.id) }}">View</a> |
+                <a href="{{ url_for('student.export_report', report_type='ats', item_id=review.id) }}">PDF</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">No ATS reports yet.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- Placement Predictions -->
+<div class="prediction-section">
+    <h2>Recent Placement Predictions</h2>
+    <table class="prediction-table">
+        <tr><th>Date</th><th>Student</th><th>Score</th><th>Package</th><th>Action</th></tr>
+        {% for p in placement_predictions %}
+        <tr>
+            <td>{{ p.created_at }}</td>
+            <td>{{ p.student_name or username }}</td>
+            <td class="high">{{ p.prediction_score }}%</td>
+            <td>{{ p.expected_package or '—' }}</td>
+            <td><a href="{{ url_for('prediction_report', prediction_id=p.id) }}">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No predictions yet.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+<a href="{{ url_for('student.export_report', report_type='career-score', item_id=0) }}" class="btn-gradient" style="margin-top:16px;">
+    <i class="fas fa-download"></i> Download Career Score PDF
+</a>
+
+<script>window.dashboardCharts = {{ chart_data | tojson }};</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard-charts.js') }}"></script>
+{% endblock %}

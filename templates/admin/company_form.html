@@ -1,0 +1,26 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if item else 'Add' }} Company{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'Add' }} Company{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:800px;">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Company Name *</label><input type="text" name="name" value="{{ item.name if item else '' }}" required></div>
+            <div class="admin-form-group"><label>Package</label><input type="text" name="package" value="{{ item.package if item else '' }}" placeholder="e.g. 12 LPA"></div>
+            <div class="admin-form-group"><label>Location</label><input type="text" name="location" value="{{ item.location if item else '' }}"></div>
+            <div class="admin-form-group"><label>Application Deadline</label><input type="date" name="application_deadline" value="{{ item.application_deadline if item else '' }}"></div>
+            <div class="admin-form-group"><label>Official Website</label><input type="url" name="official_website" value="{{ item.official_website if item else '' }}"></div>
+            <div class="admin-form-group"><label>Logo</label><input type="file" name="logo" accept="image/*"></div>
+            <div class="admin-form-group" style="grid-column:1/-1;"><label>Eligibility</label><textarea name="eligibility">{{ item.eligibility if item else '' }}</textarea></div>
+            <div class="admin-form-group" style="grid-column:1/-1;"><label>Required Skills</label><textarea name="required_skills">{{ item.required_skills if item else '' }}</textarea></div>
+            <div class="admin-form-group" style="grid-column:1/-1;"><label>Selection Process</label><textarea name="selection_process">{{ item.selection_process if item else '' }}</textarea></div>
+            <div class="admin-form-group"><label><input type="checkbox" name="is_active" {% if not item or item.is_active %}checked{% endif %}> Active</label></div>
+        </div>
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-save"></i> Save</button>
+            <a href="{{ url_for('admin.companies_list') }}" class="admin-btn admin-btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

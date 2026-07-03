@@ -1,0 +1,28 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if item else 'Publish' }} Announcement{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'Publish' }} Announcement{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:700px;">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Title *</label><input type="text" name="title" value="{{ item.title if item else '' }}" required></div>
+            <div class="admin-form-group"><label>Priority</label>
+                <select name="priority">
+                    {% for p in ['High','Normal','Low'] %}
+                    <option value="{{ p }}" {% if item and item.priority == p %}selected{% endif %}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="admin-form-group"><label>Expiry Date</label><input type="date" name="expiry_date" value="{{ item.expiry_date if item else '' }}"></div>
+            <div class="admin-form-group"><label>Image</label><input type="file" name="image" accept="image/*"></div>
+            <div class="admin-form-group" style="grid-column:1/-1;"><label>Description</label><textarea name="description" rows="5">{{ item.description if item else '' }}</textarea></div>
+            <div class="admin-form-group"><label><input type="checkbox" name="is_active" {% if not item or item.is_active %}checked{% endif %}> Active</label></div>
+        </div>
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-paper-plane"></i> Publish</button>
+            <a href="{{ url_for('admin.announcements_list') }}" class="admin-btn admin-btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

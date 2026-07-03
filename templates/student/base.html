@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bodhini AI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premium.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% if current_user_obj and current_user_obj.theme == 'light' %}light-theme{% endif %}">
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="toast-container" id="toastContainer">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="toast {{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endwith %}
+</div>
+
+<div class="dashboard">
+    <div class="sidebar" id="studentSidebar">
+        {% include 'partials/student_sidebar.html' %}
+        <a href="{{ url_for('logout') }}" class="btn-primary logout-btn">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="student-topbar">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+            <div style="flex:1;"></div>
+            <a href="{{ url_for('student.notifications_page') }}" class="notif-bell">
+                <i class="fas fa-bell"></i>
+                {% if unread_notifications %}<span class="notif-badge">{{ unread_notifications }}</span>{% endif %}
+            </a>
+            <a href="{{ url_for('student.profile') }}" class="notif-bell" title="Profile">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/premium.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

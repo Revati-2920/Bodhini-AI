@@ -1,0 +1,28 @@
+{% extends 'admin/base.html' %}
+{% block title %}View User{% endblock %}
+{% block page_title %}User: {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:800px;">
+    <div class="admin-card-header">
+        <h2>User Profile</h2>
+        <a href="{{ url_for('admin.user_edit', user_id=user.id) }}" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-edit"></i> Edit</a>
+    </div>
+    <div style="padding:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
+        <div><strong>Name</strong><br>{{ user.username }}</div>
+        <div><strong>Email</strong><br>{{ user.email }}</div>
+        <div><strong>College</strong><br>{{ user.college or '—' }}</div>
+        <div><strong>Department</strong><br>{{ user.department or '—' }}</div>
+        <div><strong>Year</strong><br>{{ user.year or '—' }}</div>
+        <div><strong>CGPA</strong><br>{{ user.cgpa or '—' }}</div>
+        <div><strong>Registered</strong><br>{{ user.created_at or '—' }}</div>
+        <div><strong>Last Login</strong><br>{{ user.last_login or '—' }}</div>
+        <div><strong>Status</strong><br>
+            <span class="status-badge {% if user.is_active %}status-active{% else %}status-disabled{% endif %}">
+                {{ 'Active' if user.is_active else 'Disabled' }}
+            </span>
+        </div>
+    </div>
+</div>
+<a href="{{ url_for('admin.users_list') }}" class="admin-btn admin-btn-outline" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Back to Users</a>
+{% endblock %}

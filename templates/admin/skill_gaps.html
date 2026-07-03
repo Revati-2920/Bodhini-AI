@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Skill Gaps{% endblock %}
+{% block page_title %}Skill Gap Analyzer Reports{% endblock %}
+
+{% block content %}
+<div class="admin-charts-grid" style="margin-bottom:24px;">
+    <div class="admin-chart-card">
+        <h3>Most Missing Skills</h3>
+        <div class="chart-container"><canvas id="chartMissingSkills"></canvas></div>
+    </div>
+    <div class="admin-chart-card">
+        <h3>Top Career Interests</h3>
+        <div class="chart-container"><canvas id="chartCareers"></canvas></div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-brain"></i> Skill Gap Analyses</h2>
+        <form method="GET" class="admin-toolbar">
+            <input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}">
+            <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Student</th><th>Career Goal</th><th>Match %</th><th>Current Skills</th><th>Missing Skills</th><th>Progress</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.user.username if item.user else '—' }}</td>
+                    <td>{{ item.career_goal or '—' }}</td>
+                    <td><strong>{{ item.skill_match or 0 }}%</strong></td>
+                    <td>{{ (item.current_skills or '')[:50] }}…</td>
+                    <td>{{ (item.missing_skills or '')[:50] }}…</td>
+                    <td>{{ item.learning_progress or 0 }}%</td>
+                    <td>{{ item.created_at or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-brain"></i><h3>No Skill Gap Reports</h3><p>Skill gap analyses will appear here.</p></div>
+    {% endif %}
+</div>
+
+<script>window.adminChartData = {{ charts | tojson }};</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/admin-charts.js') }}"></script>
+{% endblock %}

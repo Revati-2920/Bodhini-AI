@@ -1,0 +1,29 @@
+{% extends 'student/base.html' %}
+{% block title %}Resources | Bodhini AI{% endblock %}
+{% block content %}
+<h1><i class="fas fa-book-open"></i> Learning Resource Library</h1>
+<p class="subtitle">Notes, roadmaps, videos, templates & more</p>
+
+<form method="GET" style="margin-bottom:24px;display:flex;gap:10px;flex-wrap:wrap;">
+    <input type="text" name="q" placeholder="Search..." value="{{ q }}" style="flex:1;min-width:200px;padding:12px;background:#334155;border-radius:10px;border:1px solid rgba(255,255,255,0.1);color:#fff;">
+    <select name="category" style="padding:12px;background:#334155;border-radius:10px;border:1px solid rgba(255,255,255,0.1);color:#fff;">
+        <option value="">All Categories</option>
+        {% for c in categories %}<option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="btn-gradient"><i class="fas fa-search"></i></button>
+</form>
+
+<div class="company-grid">
+    {% for r in items %}
+    <div class="company-card">
+        <span class="badge-item">{{ r.category or r.resource_type }}</span>
+        <h3 style="margin-top:10px;">{{ r.title }}</h3>
+        <p style="color:#94a3b8;font-size:13px;">{{ r.description or '' }}</p>
+        {% if r.file_path %}<a href="{{ url_for('static', filename=r.file_path) }}" class="btn-gradient" style="margin-top:12px;font-size:12px;padding:8px 16px;" target="_blank"><i class="fas fa-download"></i> Download</a>{% endif %}
+        {% if r.external_url %}<a href="{{ r.external_url }}" class="btn-gradient" style="margin-top:8px;font-size:12px;padding:8px 16px;" target="_blank"><i class="fas fa-link"></i> Open</a>{% endif %}
+    </div>
+    {% else %}
+    <div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-book"></i><h3>No Resources Available</h3></div>
+    {% endfor %}
+</div>
+{% endblock %}

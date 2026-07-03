@@ -1,0 +1,21 @@
+{% extends 'student/base.html' %}
+{% block title %}Leaderboard | Bodhini AI{% endblock %}
+{% block content %}
+<h1><i class="fas fa-trophy"></i> Leaderboard</h1>
+<p class="subtitle">Top students by Career Score</p>
+<table class="leaderboard-table glass-card" style="display:block;overflow-x:auto;">
+    <tr><th>Rank</th><th>Student</th><th>Career Score</th><th>ATS</th><th>Placement</th><th>Interview</th><th>Level</th><th>XP</th></tr>
+    {% for entry in ranked %}
+    <tr>
+        <td class="{% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% endif %}">#{{ loop.index }}</td>
+        <td><strong>{{ entry.user.username }}</strong><br><span style="font-size:12px;color:#64748b;">{{ entry.user.college or '' }}</span></td>
+        <td><strong style="color:#60a5fa;">{{ entry.scores.overall }}</strong> <span class="grade-badge" style="font-size:11px;padding:2px 8px;">{{ entry.scores.grade }}</span></td>
+        <td>{{ entry.scores.ats_score }}</td>
+        <td>{{ entry.scores.placement_score }}</td>
+        <td>{{ entry.scores.interview_score }}</td>
+        <td>Lv.{{ entry.level }}</td>
+        <td>{{ entry.xp }} XP</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

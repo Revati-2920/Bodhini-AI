@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} | Bodhini AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="admin-body">
+
+<div id="toastContainer" class="admin-toast-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <span data-flash="{{ category }}" style="display:none">{{ message }}</span>
+    {% endfor %}
+    {% endwith %}
+</div>
+
+<div class="admin-overlay" id="adminOverlay"></div>
+
+<div class="admin-layout">
+    {% include 'admin/partials/sidebar.html' %}
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="admin-menu-toggle" id="adminMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="admin-topbar-actions">
+                <span style="font-size:14px;color:#64748b;">
+                    <i class="fas fa-user-shield"></i> {{ session.get('username', 'Admin') }}
+                </span>
+            </div>
+        </header>
+
+        <main class="admin-content fade-in">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

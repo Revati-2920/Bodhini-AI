@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | Skill Gap Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="dashboard">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">🤖 AI Chat</a></li>
+                <li><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li><a href="{{ url_for('placement_predictor') }}">🎯 Placement Predictor</a></li>
+                <li><a href="{{ url_for('career_roadmap') }}">🗺️ Career Roadmap</a></li>
+                <li><a href="{{ url_for('interview') }}">🎤 Interview Prep</a></li>
+                <li class="active"><a href="{{ url_for('skill_gap') }}">🎯 Skill Gap Analyzer</a></li>
+            </ul>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-primary logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="hero-panel">
+            <div>
+                <h1>🎯 Skill Gap Report</h1>
+                <p>Your personalized roadmap for {{ report.career_goal or 'your target role' }}</p>
+            </div>
+        </div>
+
+        <section class="dashboard-grid result-grid">
+            <div class="card">
+                <h3>📈 Overall Skill Match</h3>
+                <div class="score-ring">{{ report.skill_match }}%</div>
+                <p>{{ report.readiness_status }}</p>
+            </div>
+            <div class="card">
+                <h3>✅ Current Strengths</h3>
+                <div class="chip-list">
+                    {% for skill in report.strengths %}
+                    <span class="skill-chip">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <h3>⚠️ Missing Skills</h3>
+                <div class="chip-list">
+                    {% for skill in report.missing_skills %}
+                    <span class="skill-chip missing">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <h3>🧭 Priority Learning Order</h3>
+                <ol class="priority-list">
+                    {% for item in report.priority_learning %}
+                    <li><strong>{{ item.skill }}</strong> — {{ item.timeline }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="card wide-card">
+                <h3>📊 Skill Gap Analysis</h3>
+                <table class="prediction-table">
+                    <tr><th>Skill</th><th>Current</th><th>Required</th><th>Gap</th><th>Priority</th></tr>
+                    {% for row in report.skill_gap_table %}
+                    <tr>
+                        <td>{{ row.skill }}</td>
+                        <td>{{ row.current }}</td>
+                        <td>{{ row.required }}</td>
+                        <td>{{ row.gap }}</td>
+                        <td>{{ row.priority }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="card">
+                <h3>🗓️ Learning Timeline</h3>
+                <div class="timeline-list">
+                    {% for month in report.timeline %}
+                    <div class="timeline-item">{{ month }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <h3>🏅 Certifications</h3>
+                <ul class="quick-list">
+                    {% for cert in report.certifications %}
+                    <li>• {{ cert }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <h3>💡 Recommended Projects</h3>
+                <ul class="quick-list">
+                    {% for project in report.projects %}
+                    <li>• {{ project }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <h3>📚 Learning Resources</h3>
+                <ul class="quick-list">
+                    {% for resource in report.resources %}
+                    <li>• {{ resource }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <h3>📈 Placement Readiness</h3>
+                <p><strong>Current:</strong> {{ report.current_readiness }}%</p>
+                <p><strong>Target:</strong> {{ report.target_readiness }}%</p>
+                <p><strong>Estimated Time:</strong> {{ report.estimated_time }}</p>
+            </div>
+            <div class="card">
+                <h3>💰 Salary Prediction</h3>
+                <p><strong>Current:</strong> {{ report.salary_current }}</p>
+                <p><strong>After Skills:</strong> {{ report.salary_after_skills }}</p>
+                <p><strong>After 2 Years:</strong> {{ report.salary_after_two_years }}</p>
+            </div>
+            <div class="card">
+                <h3>🏢 Company Readiness</h3>
+                <ul class="quick-list">
+                    {% for company, score in report.company_readiness.items() %}
+                    <li>{{ company }} — {{ score }}%</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card wide-card">
+                <h3>🗓️ Weekly Study Plan</h3>
+                <div class="weekly-plan">
+                    {% for day, task in report.weekly_plan.items() %}
+                    <div class="weekly-item"><strong>{{ day }}</strong><span>{{ task }}</span></div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card wide-card">
+                <h3>🤖 AI Suggestions</h3>
+                <p>{{ report.ai_suggestions }}</p>
+            </div>
+            <div class="card wide-card">
+                <h3>🌟 Motivation</h3>
+                <p>{{ report.motivation }}</p>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

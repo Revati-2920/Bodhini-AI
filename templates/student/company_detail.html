@@ -1,0 +1,32 @@
+{% extends 'student/base.html' %}
+{% block title %}{{ company.name }} | Bodhini AI{% endblock %}
+{% block content %}
+<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:24px;">
+    {% if company.logo %}<img src="{{ url_for('static', filename=company.logo) }}" style="width:80px;height:80px;border-radius:16px;object-fit:cover;">{% endif %}
+    <div>
+        <h1>{{ company.name }}</h1>
+        <p style="color:#60a5fa;font-size:18px;font-weight:600;">{{ company.package or 'Package TBD' }}</p>
+        <p style="color:#94a3b8;">{{ company.location }} · Deadline: {{ company.application_deadline or 'TBD' }}</p>
+    </div>
+    <form method="POST" action="{{ url_for('student.bookmark_toggle') }}" style="margin-left:auto;">
+        <input type="hidden" name="item_type" value="company">
+        <input type="hidden" name="item_id" value="{{ company.id }}">
+        <input type="hidden" name="title" value="{{ company.name }}">
+        <button type="submit" class="btn-gradient">{% if bookmarked %}★ Bookmarked{% else %}☆ Bookmark{% endif %}</button>
+    </form>
+</div>
+
+<div class="form-grid">
+    <div class="glass-card"><h3>Eligibility</h3><p style="color:#94a3b8;margin-top:8px;">{{ company.eligibility or 'Not specified' }}</p></div>
+    <div class="glass-card"><h3>Required Skills</h3><p style="color:#94a3b8;margin-top:8px;">{{ company.required_skills or 'Not specified' }}</p></div>
+    <div class="glass-card" style="grid-column:1/-1;"><h3>Selection Process</h3><p style="color:#94a3b8;margin-top:8px;">{{ company.selection_process or 'Not specified' }}</p></div>
+    <div class="glass-card"><h3>Interview Questions</h3><p style="color:#94a3b8;margin-top:8px;white-space:pre-line;">{{ company.interview_questions or 'Coming soon' }}</p></div>
+    <div class="glass-card"><h3>Coding Questions</h3><p style="color:#94a3b8;margin-top:8px;white-space:pre-line;">{{ company.coding_questions or 'Coming soon' }}</p></div>
+    <div class="glass-card"><h3>Preparation Tips</h3><p style="color:#94a3b8;margin-top:8px;white-space:pre-line;">{{ company.preparation_tips or 'Practice DSA and system design.' }}</p></div>
+</div>
+
+{% if company.official_website %}
+<a href="{{ company.official_website }}" target="_blank" class="btn-gradient" style="margin-top:20px;"><i class="fas fa-external-link-alt"></i> Official Website</a>
+{% endif %}
+<a href="{{ url_for('student.companies') }}" class="btn-gradient" style="margin-top:20px;margin-left:10px;background:#334155;">← Back</a>
+{% endblock %}

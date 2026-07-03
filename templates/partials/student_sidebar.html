@@ -1,0 +1,70 @@
+{% set ep = request.endpoint or '' %}
+<div>
+    <div class="logo">
+        <div class="logo-title">Bodhini AI</div>
+        <div class="logo-tagline">Transforming Learning into Opportunities</div>
+    </div>
+
+    <ul class="menu">
+        <li class="{% if ep == 'dashboard' %}active{% endif %}">
+            <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+    </ul>
+    <div class="menu-section-label">AI Modules</div>
+    <ul class="menu">
+        <li class="{% if ep == 'chat' %}active{% endif %}">
+            <a href="{{ url_for('chat') }}"><i class="fas fa-robot"></i> AI Chat</a>
+        </li>
+        <li class="{% if ep == 'resume' %}active{% endif %}">
+            <a href="{{ url_for('resume') }}"><i class="fas fa-file-alt"></i> ATS Resume</a>
+        </li>
+        <li class="{% if ep == 'placement_predictor' %}active{% endif %}">
+            <a href="{{ url_for('placement_predictor') }}"><i class="fas fa-bullseye"></i> Placement</a>
+        </li>
+        <li class="{% if ep == 'career_roadmap' %}active{% endif %}">
+            <a href="{{ url_for('career_roadmap') }}"><i class="fas fa-map"></i> Roadmap</a>
+        </li>
+        <li class="{% if ep == 'interview' %}active{% endif %}">
+            <a href="{{ url_for('interview') }}"><i class="fas fa-microphone"></i> Interview</a>
+        </li>
+        <li class="{% if ep == 'skill_gap' %}active{% endif %}">
+            <a href="{{ url_for('skill_gap') }}"><i class="fas fa-brain"></i> Skill Gap</a>
+        </li>
+    </ul>
+    <div class="menu-section-label">Career Hub</div>
+    <ul class="menu">
+        <li class="{% if ep and 'compan' in ep %}active{% endif %}">
+            <a href="{{ url_for('student.companies') }}"><i class="fas fa-building"></i> Companies</a>
+        </li>
+        <li class="{% if ep == 'student.calendar' %}active{% endif %}">
+            <a href="{{ url_for('student.calendar') }}"><i class="fas fa-calendar"></i> Calendar</a>
+        </li>
+        <li class="{% if ep == 'student.resources' %}active{% endif %}">
+            <a href="{{ url_for('student.resources') }}"><i class="fas fa-book"></i> Resources</a>
+        </li>
+        <li class="{% if ep == 'student.certificates' %}active{% endif %}">
+            <a href="{{ url_for('student.certificates') }}"><i class="fas fa-certificate"></i> Certificates</a>
+        </li>
+        <li class="{% if ep == 'student.leaderboard' %}active{% endif %}">
+            <a href="{{ url_for('student.leaderboard') }}"><i class="fas fa-trophy"></i> Leaderboard</a>
+        </li>
+        <li class="{% if ep == 'student.weekly_report' %}active{% endif %}">
+            <a href="{{ url_for('student.weekly_report') }}"><i class="fas fa-chart-line"></i> Weekly Report</a>
+        </li>
+    </ul>
+    <div class="menu-section-label">Account</div>
+    <ul class="menu">
+        <li class="{% if ep == 'student.profile' %}active{% endif %}">
+            <a href="{{ url_for('student.profile') }}"><i class="fas fa-user"></i> Profile</a>
+        </li>
+        <li class="{% if ep == 'student.bookmarks' %}active{% endif %}">
+            <a href="{{ url_for('student.bookmarks') }}"><i class="fas fa-bookmark"></i> Bookmarks</a>
+        </li>
+        <li class="{% if ep == 'student.settings' %}active{% endif %}">
+            <a href="{{ url_for('student.settings') }}"><i class="fas fa-cog"></i> Settings</a>
+        </li>
+        <li class="{% if ep == 'student.support' %}active{% endif %}">
+            <a href="{{ url_for('student.support') }}"><i class="fas fa-life-ring"></i> Support</a>
+        </li>
+    </ul>
+</div>

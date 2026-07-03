@@ -1,0 +1,46 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Resume Reports{% endblock %}
+{% block page_title %}Resume Management{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-file-alt"></i> Uploaded Resumes</h2>
+        <form method="GET" class="admin-toolbar">
+            <input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}">
+            <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Student</th><th>Resume</th><th>Resume Score</th><th>ATS Score</th><th>Upload Date</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.user.username if item.user else 'Unknown' }}</td>
+                    <td>{{ item.resume_name or '—' }}</td>
+                    <td><strong>{{ item.resume_score or 0 }}</strong></td>
+                    <td><strong style="color:#2563eb;">{{ item.ats_score or 0 }}</strong></td>
+                    <td>{{ item.created_at or '—' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.ats_report_view', item_id=item.id) }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-eye"></i></a>
+                        {% if item.file_path %}
+                        <a href="{{ url_for('admin.resume_download', item_id=item.id) }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-download"></i></a>
+                        {% endif %}
+                        <form method="POST" action="{{ url_for('admin.resume_delete', item_id=item.id) }}" style="display:inline;">
+                            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" data-confirm="Delete this resume?"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-file-alt"></i><h3>No Resumes Yet</h3><p>Resume uploads will appear here.</p></div>
+    {% endif %}
+</div>
+{% endblock %}

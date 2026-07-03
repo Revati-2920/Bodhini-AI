@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | ATS Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resume.css') }}">
+</head>
+<body class="{% if printable %}printable-report{% endif %}">
+<div class="dashboard-shell">
+    <aside class="sidebar no-print">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">AI Chat</a></li>
+                <li class="active"><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li><a href="{{ url_for('placement_predictor') }}">Placement Predictor</a></li>
+                <li><a href="{{ url_for('career_roadmap') }}">Career Roadmap</a></li>
+                <li><a href="{{ url_for('interview') }}">Interview Prep</a></li>
+                <li><a href="{{ url_for('skill_gap') }}">Skill Gap Analyzer</a></li>
+            </ul>
+        </div>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content ats-main report-main">
+        <section class="result-hero premium-card">
+            <div class="score-orbit score-{{ 'green' if report.ats_score >= 90 else 'blue' if report.ats_score >= 75 else 'orange' if report.ats_score >= 60 else 'red' }}" style="--score: {{ report.ats_score * 3.6 }}deg;">
+                <div>
+                    <span>ATS Score</span>
+                    <strong>{{ report.ats_score }}%</strong>
+                </div>
+            </div>
+            <div class="result-intro">
+                <span class="eyebrow">{{ report.target_role }}</span>
+                <h1>{{ report.resume_name }}</h1>
+                <p>{{ report.summary }}</p>
+                <div class="action-row no-print">
+                    <a class="analyze-btn link-btn" href="{{ url_for('resume') }}">New Scan</a>
+                    <button class="ghost-btn" onclick="window.print()">Print Report</button>
+                    <a class="ghost-btn" href="{{ url_for('ats_resume_report_download', review_id=review.id) }}" target="_blank">Download PDF Report</a>
+                </div>
+                <p class="share-link no-print">Shareable report link: {{ share_url }}</p>
+            </div>
+        </section>
+
+        <section class="summary-grid">
+            {% for label, value in [
+                ('Candidate Name', report.candidate_name),
+                ('Detected Role', report.detected_role),
+                ('Experience Level', report.experience_level),
+                ('Education', report.education),
+                ('Skills Count', report.skills_count),
+                ('Projects Count', report.projects_count),
+                ('Certifications Count', report.certifications_count),
+                ('Resume Pages', report.resume_pages),
+                ('Estimated Reading Time', report.reading_time)
+            ] %}
+            <div class="mini-stat premium-card">
+                <span>{{ label }}</span>
+                <strong>{{ value }}</strong>
+            </div>
+            {% endfor %}
+        </section>
+
+        <section class="report-grid">
+            <div class="premium-card">
+                <div class="section-title"><h2>ATS Compatibility</h2></div>
+                <div class="check-list">
+                    {% for item in report.compatibility %}
+                    <div class="check-row {{ 'ok' if item.ok else 'bad' }}"><span>{{ 'OK' if item.ok else 'NO' }}</span>{{ item.label }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Keyword Analysis</h2><span class="score-badge">{{ report.keyword_match }}%</span></div>
+                <h3>Matched Keywords</h3>
+                <div class="chip-wrap">
+                    {% for item in report.matched_keywords %}<span class="chip good">{{ item }}</span>{% endfor %}
+                </div>
+                <h3>Missing Keywords</h3>
+                <div class="chip-wrap">
+                    {% for item in report.missing_keywords %}<span class="chip warn">{{ item }}</span>{% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card wide-card">
+                <div class="section-title"><h2>Resume Section Analysis</h2></div>
+                <div class="section-analysis">
+                    {% for item in report.sections %}
+                    <div>
+                        <div class="section-line"><strong>{{ item.name }}</strong><span>{{ item.stars }}</span></div>
+                        <p>{{ item.suggestion }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Formatting Analysis</h2></div>
+                <div class="format-grid">
+                    {% for item in report.formatting %}
+                    <div class="format-pill {{ item.status|lower|replace(' ', '-') }}">{{ item.label }} <span>{{ item.status }}</span></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Resume Strengths</h2></div>
+                <ul class="clean-list">
+                    {% for item in report.strengths %}<li>{{ item }}</li>{% endfor %}
+                </ul>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Improvement Suggestions</h2></div>
+                <ul class="clean-list">
+                    {% for item in report.improvements %}<li>{{ item }}</li>{% endfor %}
+                </ul>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Missing Sections</h2></div>
+                <div class="chip-wrap">
+                    {% for item in report.missing_sections %}<span class="chip warn">{{ item }}</span>{% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Recruiter View</h2></div>
+                <h3>Pros</h3>
+                <ul class="clean-list compact">{% for item in report.recruiter_view.pros %}<li>{{ item }}</li>{% endfor %}</ul>
+                <h3>Cons</h3>
+                <ul class="clean-list compact">{% for item in report.recruiter_view.cons %}<li>{{ item }}</li>{% endfor %}</ul>
+                <p class="soft-copy">{{ report.recruiter_view.overall }}</p>
+            </div>
+
+            <div class="premium-card wide-card">
+                <div class="section-title"><h2>Company Readiness</h2></div>
+                <div class="company-grid">
+                    {% for item in report.company_readiness %}
+                    <div class="company-card">
+                        <strong>{{ item.company }}</strong>
+                        <span>{{ item.status }}</span>
+                        <div class="meter"><i style="width: {{ item.score }}%;"></i></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card improvement-card">
+                <div class="section-title"><h2>Resume Improvement Score</h2></div>
+                <div class="improvement-numbers">
+                    <div><span>Current ATS</span><strong>{{ report.ats_score }}%</strong></div>
+                    <div class="arrow">-></div>
+                    <div><span>Potential ATS</span><strong>{{ report.potential_score }}%</strong></div>
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>Smart AI Recommendations</h2></div>
+                <ul class="clean-list">
+                    {% for item in report.recommendations %}<li>{{ item }}</li>{% endfor %}
+                </ul>
+            </div>
+
+            <div class="premium-card wide-card">
+                <div class="section-title"><h2>Resume Quality Meter</h2></div>
+                <div class="quality-grid">
+                    {% for item in report.quality_meter %}
+                    <div class="quality-row"><span>{{ item.label }}</span><div class="meter"><i style="width: {{ item.value }}%;"></i></div><strong>{{ item.value }}%</strong></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>ATS Heatmap</h2></div>
+                <div class="heatmap">
+                    {% for item in report.heatmap %}
+                    <div style="--heat: {{ item.value }}%;"><span>{{ item.label }}</span><strong>{{ item.value }}%</strong></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="premium-card">
+                <div class="section-title"><h2>AI Resume Rewrite Suggestions</h2></div>
+                <ul class="clean-list">
+                    {% for item in report.rewrite_suggestions %}<li>{{ item }}</li>{% endfor %}
+                </ul>
+            </div>
+
+            <div class="premium-card wide-card">
+                <div class="section-title"><h2>AI Career Suggestions</h2></div>
+                <div class="career-grid">
+                    <div><h3>Recommended Roles</h3><div class="chip-wrap">{% for item in report.career_suggestions.roles %}<span class="chip good">{{ item }}</span>{% endfor %}</div></div>
+                    <div><h3>Projects</h3><ul class="clean-list compact">{% for item in report.career_suggestions.projects %}<li>{{ item }}</li>{% endfor %}</ul></div>
+                    <div><h3>Skills</h3><div class="chip-wrap">{% for item in report.career_suggestions.skills %}<span class="chip warn">{{ item }}</span>{% endfor %}</div></div>
+                    <div><h3>Courses</h3><ul class="clean-list compact">{% for item in report.career_suggestions.courses %}<li>{{ item }}</li>{% endfor %}</ul></div>
+                    <div><h3>Certifications</h3><ul class="clean-list compact">{% for item in report.career_suggestions.certifications %}<li>{{ item }}</li>{% endfor %}</ul></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+{% if printable %}
+<script>window.addEventListener('load', () => setTimeout(() => window.print(), 400));</script>
+{% endif %}
+</body>
+</html>

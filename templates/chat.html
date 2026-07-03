@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bodhini AI Chat</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premium.css') }}">
+</head>
+
+<body>
+
+<div class="chat-layout">
+
+    <!-- Sidebar -->
+
+    <div class="chat-sidebar">
+
+        <div>
+
+            <div class="logo">
+                <h2>Bodhini AI</h2>
+                <p>Career Growth Platform</p>
+            </div>
+
+            <ul class="sidebar-menu">
+
+                <li>
+                    <a href="/dashboard">
+                        🏠 Dashboard
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="/chat">
+                        🤖 AI Chat
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('resume') }}">
+                        ATS Resume Checker
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        🎯 Placement Predictor
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        📚 Career Roadmap
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+    <!-- Main Chat Area -->
+
+    <div class="chat-main">
+
+        <div class="chat-header">
+            🤖 Bodhini AI Assistant
+        </div>
+
+        <div class="chat-messages">
+
+            {% if not response %}
+
+            <div class="welcome-screen">
+
+                <h1>Welcome to Bodhini AI</h1>
+
+                <p>
+                    Your AI Career Coach for Placements,
+                    Learning and Professional Growth.
+                </p>
+
+                <div class="suggestions">
+
+                    <div class="suggestion-card">
+                        Improve my resume
+                    </div>
+
+                    <div class="suggestion-card">
+                        Create learning roadmap
+                    </div>
+
+                    <div class="suggestion-card">
+                        Placement preparation plan
+                    </div>
+
+                    <div class="suggestion-card">
+                        Suggested projects
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            {% if prompt %}
+
+            <div class="user-message">
+                <strong>You</strong>
+                <p>{{ prompt }}</p>
+            </div>
+
+            {% endif %}
+
+            {% if response %}
+
+            <div class="ai-message">
+                <strong>🤖 Bodhini AI</strong>
+                <p>{{ response }}</p>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Input Area -->
+
+        <form method="POST" class="chat-input-area">
+
+            <input
+                type="text"
+                name="prompt"
+                placeholder="Type your message..."
+                required>
+
+            <button type="submit">
+                Send ➤
+            </button>
+
+        </form>
+
+        {% with module_name='AI Career Chat' %}
+        {% include 'partials/feedback_widget.html' %}
+        {% endwith %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

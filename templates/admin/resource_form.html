@@ -1,0 +1,35 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if item else 'Add' }} Resource{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'Upload' }} Learning Resource{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:800px;">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Title *</label><input type="text" name="title" value="{{ item.title if item else '' }}" required></div>
+            <div class="admin-form-group"><label>Category</label>
+                <select name="category">
+                    {% for c in ['PDF','Notes','Videos','Roadmaps','Resume Templates','Interview PDFs','Coding Sheets'] %}
+                    <option value="{{ c }}" {% if item and item.category == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="admin-form-group"><label>Resource Type</label>
+                <select name="resource_type">
+                    {% for t in ['PDF','Video','Document','Link','Template'] %}
+                    <option value="{{ t }}" {% if item and item.resource_type == t %}selected{% endif %}>{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="admin-form-group"><label>External URL</label><input type="url" name="external_url" value="{{ item.external_url if item else '' }}"></div>
+            <div class="admin-form-group"><label>Upload File</label><input type="file" name="file"></div>
+            <div class="admin-form-group" style="grid-column:1/-1;"><label>Description</label><textarea name="description">{{ item.description if item else '' }}</textarea></div>
+            <div class="admin-form-group"><label><input type="checkbox" name="is_active" {% if not item or item.is_active %}checked{% endif %}> Active</label></div>
+        </div>
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-save"></i> Save</button>
+            <a href="{{ url_for('admin.resources_list') }}" class="admin-btn admin-btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

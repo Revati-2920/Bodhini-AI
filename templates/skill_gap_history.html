@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | Skill Gap History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="dashboard">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">🤖 AI Chat</a></li>
+                <li><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li><a href="{{ url_for('placement_predictor') }}">🎯 Placement Predictor</a></li>
+                <li><a href="{{ url_for('career_roadmap') }}">🗺️ Career Roadmap</a></li>
+                <li><a href="{{ url_for('interview') }}">🎤 Interview Prep</a></li>
+                <li class="active"><a href="{{ url_for('skill_gap') }}">🎯 Skill Gap Analyzer</a></li>
+            </ul>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-primary logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="hero-panel">
+            <div>
+                <h1>🕘 Skill Gap History</h1>
+                <p>Review your previous analyses and continue your learning journey.</p>
+            </div>
+        </div>
+
+        <section class="card">
+            <table class="prediction-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Career Goal</th>
+                    <th>Skill Match</th>
+                    <th>Action</th>
+                </tr>
+                {% for item in history %}
+                <tr>
+                    <td>{{ item.created_at }}</td>
+                    <td>{{ item.career_goal }}</td>
+                    <td>{{ item.skill_match }}%</td>
+                    <td>
+                        <a href="{{ url_for('skill_gap_result', analysis_id=item.id) }}" class="btn-primary small-btn">View Report</a>
+                        <a href="{{ url_for('delete_analysis', analysis_id=item.id) }}" class="btn-outline small-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </main>
+</div>
+</body>
+</html>

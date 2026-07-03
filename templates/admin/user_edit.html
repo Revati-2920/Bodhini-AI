@@ -1,0 +1,24 @@
+{% extends 'admin/base.html' %}
+{% block title %}Edit User{% endblock %}
+{% block page_title %}Edit User: {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:700px;">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Username</label><input type="text" name="username" value="{{ user.username }}" required></div>
+            <div class="admin-form-group"><label>Email</label><input type="email" name="email" value="{{ user.email }}" required></div>
+            <div class="admin-form-group"><label>College</label><input type="text" name="college" value="{{ user.college or '' }}"></div>
+            <div class="admin-form-group"><label>Department</label><input type="text" name="department" value="{{ user.department or '' }}"></div>
+            <div class="admin-form-group"><label>Year</label><input type="text" name="year" value="{{ user.year or '' }}"></div>
+            <div class="admin-form-group"><label>CGPA</label><input type="text" name="cgpa" value="{{ user.cgpa or '' }}"></div>
+            <div class="admin-form-group"><label>Profile Picture</label><input type="file" name="profile_picture" accept="image/*"></div>
+            <div class="admin-form-group"><label><input type="checkbox" name="is_active" {% if user.is_active %}checked{% endif %}> Active Account</label></div>
+        </div>
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+            <a href="{{ url_for('admin.users_list') }}" class="admin-btn admin-btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

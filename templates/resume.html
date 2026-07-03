@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resume.css') }}">
+</head>
+<body>
+<div class="dashboard-shell">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+
+            <ul class="menu">
+                <li>
+                    <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('chat') }}">🤖 AI Chat</a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('resume') }}">📄 Resume Analyzer</a>
+                </li>
+                <li>
+                    <a href="#">🎯 Placement Predictor</a>
+                </li>
+                <li>
+                    <a href="#">📚 Learning Roadmap</a>
+                </li>
+            </ul>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1>Resume Analyzer</h1>
+                <p>Upload your resume and let Bodhini AI review it like a recruiter.</p>
+            </div>
+        </div>
+
+        <section class="upload-card">
+            <form method="POST" enctype="multipart/form-data" class="upload-form">
+                <label class="upload-area" for="resume-file">
+                    <input id="resume-file" type="file" name="resume" accept=".pdf,.docx" required>
+                    <div class="upload-icon" id="upload-icon">📄</div>
+                    <h3 id="upload-title">Upload your Resume</h3>
+                    <p id="upload-text">PDF or DOCX · Maximum Size: 5 MB</p>
+                    <span class="upload-btn">Browse File</span>
+                    <div id="file-name" class="filename-pill hidden">No file selected</div>
+                    <small>Supported: PDF, DOCX · Max size: 5 MB</small>
+                </label>
+
+                <div class="upload-meta">
+                    <div id="selection-status" class="selection-status">📤 Upload your Resume</div>
+                    <button type="submit" class="analyze-btn" id="analyze-btn" disabled>Analyze Resume</button>
+                </div>
+            </form>
+        </section>
+
+        {% if analysis %}
+        <section class="results-grid">
+            <div class="result-card score-card">
+                <div class="score-circle">
+                    <span>{{ analysis.resume_score }}</span>
+                </div>
+                <h3>Resume Score</h3>
+                <p>Overall quality and impact of your resume.</p>
+            </div>
+
+            <div class="result-card score-card">
+                <div class="score-circle secondary">
+                    <span>{{ analysis.ats_score }}</span>
+                </div>
+                <h3>ATS Compatibility</h3>
+                <p>How well your resume matches recruiter filters.</p>
+            </div>
+
+            <div class="result-card wide-card">
+                <h3>Strengths</h3>
+                <ul>
+                    {% for item in analysis.strengths %}
+                    <li>✔ {{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card wide-card">
+                <h3>Areas to Improve</h3>
+                <ul>
+                    {% for item in analysis.weaknesses %}
+                    <li>• {{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card wide-card">
+                <h3>Missing Skills</h3>
+                <ul>
+                    {% for item in analysis.missing_skills %}
+                    <li>• {{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card wide-card">
+                <h3>Recommended Projects</h3>
+                <ul>
+                    {% for item in analysis.project_suggestions %}
+                    <li>🚀 {{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card wide-card">
+                <h3>Recommended Certifications</h3>
+                <ul>
+                    {% for item in analysis.certifications %}
+                    <li>🎓 {{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card wide-card">
+                <h3>Best Companies to Target</h3>
+                <ul>
+                    {% for item in analysis.best_companies %}
+                    <li>🏢 {{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card feedback-card">
+                <h3>Overall Feedback</h3>
+                <p>{{ analysis.resume_summary_feedback }}</p>
+                <p>{{ analysis.final_advice }}</p>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+</div>
+
+<script>
+const fileInput = document.getElementById('resume-file');
+const analyzeBtn = document.getElementById('analyze-btn');
+const fileNameBox = document.getElementById('file-name');
+const uploadTitle = document.getElementById('upload-title');
+const uploadText = document.getElementById('upload-text');
+const uploadIcon = document.getElementById('upload-icon');
+const uploadArea = document.querySelector('.upload-area');
+const selectionStatus = document.getElementById('selection-status');
+
+function updateUploadUI() {
+    if (fileInput.files && fileInput.files.length > 0) {
+        const name = fileInput.files[0].name;
+        fileNameBox.textContent = `📄 ${name}`;
+        fileNameBox.classList.remove('hidden');
+        uploadTitle.textContent = 'Resume Selected';
+        uploadText.textContent = 'Ready to analyze';
+        uploadIcon.textContent = '✅';
+        uploadArea.classList.add('selected');
+        selectionStatus.innerHTML = `✔ ${name}`;
+        analyzeBtn.disabled = false;
+    } else {
+        fileNameBox.textContent = 'No file selected';
+        fileNameBox.classList.add('hidden');
+        uploadTitle.textContent = 'Upload your Resume';
+        uploadText.textContent = 'PDF or DOCX · Maximum Size: 5 MB';
+        uploadIcon.textContent = '📄';
+        uploadArea.classList.remove('selected');
+        selectionStatus.textContent = '📤 Upload your Resume';
+        analyzeBtn.disabled = true;
+    }
+}
+
+if (fileInput) {
+    fileInput.addEventListener('change', updateUploadUI);
+}
+
+updateUploadUI();
+</script>
+</body>
+</html>

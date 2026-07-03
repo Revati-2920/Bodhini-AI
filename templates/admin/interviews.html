@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Interviews{% endblock %}
+{% block page_title %}Interview Reports{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-microphone"></i> Interview Sessions</h2>
+        <form method="GET" class="admin-toolbar">
+            <input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}">
+            <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Student</th><th>Type</th><th>Difficulty</th><th>Questions</th><th>Score</th><th>Communication</th><th>Technical</th><th>Confidence</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.user.username if item.user else '—' }}</td>
+                    <td>{{ item.interview_type or '—' }}</td>
+                    <td>{{ item.difficulty or '—' }}</td>
+                    <td>{{ item.total_questions or 0 }}</td>
+                    <td><strong>{{ item.overall_score or 0 }}/10</strong></td>
+                    <td>{{ item.communication_rating or '—' }}</td>
+                    <td>{{ item.technical_rating or '—' }}</td>
+                    <td>{{ item.confidence_rating or '—' }}</td>
+                    <td>{{ item.created_at or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-microphone"></i><h3>No Interview Reports</h3><p>Interview sessions will appear here.</p></div>
+    {% endif %}
+</div>
+{% endblock %}

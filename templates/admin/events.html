@@ -1,0 +1,52 @@
+{% extends 'admin/base.html' %}
+{% from 'admin/partials/pagination.html' import pagination %}
+{% block title %}Events{% endblock %}
+{% block page_title %}Event Management{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2><i class="fas fa-calendar-alt"></i> Events</h2>
+        <div class="admin-toolbar">
+            <form method="GET" style="display:flex;gap:10px;">
+                <input type="text" name="q" class="admin-search" placeholder="Search..." value="{{ q }}">
+                <select name="type" class="admin-select">
+                    <option value="">All Types</option>
+                    {% for t in ['Placement Drive','Hackathon','Workshop','Webinar','Seminar'] %}
+                    <option value="{{ t }}" {% if event_type == t %}selected{% endif %}>{{ t }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-search"></i></button>
+            </form>
+            <a href="{{ url_for('admin.event_form') }}" class="admin-btn admin-btn-primary admin-btn-sm"><i class="fas fa-plus"></i> Add Event</a>
+        </div>
+    </div>
+    {% if items %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead><tr><th>Title</th><th>Type</th><th>Date</th><th>Venue</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td><strong>{{ item.title }}</strong></td>
+                    <td><span class="status-badge priority-normal">{{ item.event_type or '—' }}</span></td>
+                    <td>{{ item.event_date or '—' }}</td>
+                    <td>{{ item.venue or '—' }}</td>
+                    <td><span class="status-badge status-active">{{ item.status or 'Upcoming' }}</span></td>
+                    <td>
+                        <a href="{{ url_for('admin.event_form', item_id=item.id) }}" class="admin-btn admin-btn-outline admin-btn-sm"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{ url_for('admin.event_delete', item_id=item.id) }}" style="display:inline;">
+                            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" data-confirm="Delete this event?"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ pagination(page, pages, total, per_page) }}
+    {% else %}
+    <div class="admin-empty"><i class="fas fa-calendar-alt"></i><h3>No Events</h3><p><a href="{{ url_for('admin.event_form') }}" class="admin-btn admin-btn-primary admin-btn-sm">Create Event</a></p></div>
+    {% endif %}
+</div>
+{% endblock %}

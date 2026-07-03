@@ -1,0 +1,19 @@
+{% macro pagination(page, pages, total, per_page) %}
+<div class="admin-pagination">
+    <div class="admin-pagination-info">Showing page {{ page }} of {{ pages }} ({{ total }} total)</div>
+    <div class="admin-pagination-links">
+        {% if page > 1 %}
+        <a href="?{{ request.query_string.decode() | replace('page=' ~ page, 'page=' ~ (page-1)) if 'page=' in request.query_string.decode() else request.query_string.decode() ~ '&page=' ~ (page-1) if request.query_string else 'page=' ~ (page-1) }}">← Prev</a>
+        {% endif %}
+        {% for p in range(1, pages + 1) %}
+            {% if p == page %}<span class="current">{{ p }}</span>
+            {% elif p <= 3 or p > pages - 2 or (p >= page - 1 and p <= page + 1) %}
+            <a href="?page={{ p }}{% for k,v in request.args.items() if k != 'page' %}&{{ k }}={{ v }}{% endfor %}">{{ p }}</a>
+            {% elif p == 4 or p == pages - 2 %}<span>…</span>{% endif %}
+        {% endfor %}
+        {% if page < pages %}
+        <a href="?page={{ page + 1 }}{% for k,v in request.args.items() if k != 'page' %}&{{ k }}={{ v }}{% endfor %}">Next →</a>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

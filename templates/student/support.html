@@ -1,0 +1,32 @@
+{% extends 'student/base.html' %}
+{% block title %}Support | Bodhini AI{% endblock %}
+{% block content %}
+<h1><i class="fas fa-life-ring"></i> Support Center</h1>
+
+<div class="form-grid" style="margin-bottom:32px;">
+    <div class="glass-card">
+        <h3>FAQ</h3>
+        <details style="margin-top:12px;color:#94a3b8;"><summary style="cursor:pointer;color:#e2e8f0;">How does ATS Resume Checker work?</summary><p style="margin-top:8px;">Upload your resume and our AI analyzes ATS compatibility, keywords, and formatting.</p></details>
+        <details style="margin-top:12px;color:#94a3b8;"><summary style="cursor:pointer;color:#e2e8f0;">Is my data secure?</summary><p style="margin-top:8px;">Yes. Passwords are hashed and data is stored securely in SQLite.</p></details>
+        <details style="margin-top:12px;color:#94a3b8;"><summary style="cursor:pointer;color:#e2e8f0;">How is Career Score calculated?</summary><p style="margin-top:8px;">Weighted average of resume, ATS, placement, interview, and skill scores.</p></details>
+    </div>
+    <div class="glass-card premium-form">
+        <h3>Contact Us</h3>
+        <form method="POST">
+            <div class="form-group"><label>Subject</label><input type="text" name="subject" required></div>
+            <div class="form-group"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
+            <div class="form-group"><label>Rating</label>
+                <select name="rating"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option></select>
+            </div>
+            <button type="submit" class="btn-gradient"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </form>
+        <p style="margin-top:16px;color:#64748b;font-size:13px;">Email: support@bodhini.ai</p>
+    </div>
+</div>
+
+<div class="glass-card">
+    <h3>About Bodhini AI</h3>
+    <p style="color:#94a3b8;margin-top:8px;">Bodhini AI is an AI-powered Placement & Career Guidance Platform for college students. We help you prepare for placements with resume analysis, mock interviews, skill gap analysis, and personalized career roadmaps.</p>
+    <p style="margin-top:12px;"><a href="#" style="color:#60a5fa;">Privacy Policy</a> · <a href="#" style="color:#60a5fa;">Terms of Service</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'admin/base.html' %}
+{% block title %}ATS Report{% endblock %}
+{% block page_title %}ATS Report Detail{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width:900px;">
+    <div class="admin-card-header">
+        <h2>{{ item.resume_name or 'Resume Report' }}</h2>
+        <span class="status-badge status-active">{{ item.ats_score or 0 }}% ATS</span>
+    </div>
+    <div style="padding:24px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;">
+            <div class="admin-kpi-card" style="padding:16px;"><div class="kpi-label">Student</div><div class="kpi-value" style="font-size:18px;">{{ item.user.username if item.user else '—' }}</div></div>
+            <div class="admin-kpi-card" style="padding:16px;"><div class="kpi-label">Resume Score</div><div class="kpi-value" style="font-size:18px;">{{ item.resume_score or 0 }}</div></div>
+            <div class="admin-kpi-card" style="padding:16px;"><div class="kpi-label">ATS Score</div><div class="kpi-value" style="font-size:18px;">{{ item.ats_score or 0 }}</div></div>
+            <div class="admin-kpi-card" style="padding:16px;"><div class="kpi-label">Date</div><div class="kpi-value" style="font-size:18px;">{{ item.created_at or '—' }}</div></div>
+        </div>
+        {% if report.strengths %}
+        <h3 style="margin-bottom:12px;">Strengths</h3>
+        <ul style="margin-bottom:20px;padding-left:20px;">{% for s in report.strengths %}<li>{{ s }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if report.improvements %}
+        <h3 style="margin-bottom:12px;">Improvements</h3>
+        <ul style="padding-left:20px;">{% for s in report.improvements %}<li>{{ s }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if report.summary %}<p style="margin-top:20px;color:#64748b;">{{ report.summary }}</p>{% endif %}
+    </div>
+</div>
+<a href="{{ url_for('admin.ats_reports') }}" class="admin-btn admin-btn-outline" style="margin-top:16px;"><i class="fas fa-arrow-left"></i> Back</a>
+{% endblock %}

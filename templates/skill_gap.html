@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhini AI | Skill Gap Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="dashboard">
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <div class="logo-title">Bodhini AI</div>
+                <div class="logo-tagline">Transforming Learning into Opportunities</div>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+                <li><a href="{{ url_for('chat') }}">🤖 AI Chat</a></li>
+                <li><a href="{{ url_for('resume') }}">ATS Resume Checker</a></li>
+                <li><a href="{{ url_for('placement_predictor') }}">🎯 Placement Predictor</a></li>
+                <li><a href="{{ url_for('career_roadmap') }}">🗺️ Career Roadmap</a></li>
+                <li><a href="{{ url_for('interview') }}">🎤 Interview Prep</a></li>
+                <li class="active"><a href="{{ url_for('skill_gap') }}">🎯 Skill Gap Analyzer</a></li>
+            </ul>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-primary logout-btn">Logout</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="hero-panel">
+            <div>
+                <h1>🎯 AI Skill Gap Analyzer</h1>
+                <p>Analyze your current skills and discover what you need to learn to achieve your dream career.</p>
+            </div>
+        </div>
+
+        <section class="card form-card">
+            <form method="post" class="skill-gap-form">
+                <div class="form-grid">
+                    <div class="control-group">
+                        <label>Target Career</label>
+                        <select name="career_goal">
+                            <option>Software Engineer</option>
+                            <option>Full Stack Developer</option>
+                            <option>Backend Developer</option>
+                            <option>Frontend Developer</option>
+                            <option>AI Engineer</option>
+                            <option>Machine Learning Engineer</option>
+                            <option>Data Scientist</option>
+                            <option>Data Analyst</option>
+                            <option>Cyber Security Engineer</option>
+                            <option>Cloud Engineer</option>
+                            <option>DevOps Engineer</option>
+                            <option>Android Developer</option>
+                            <option>UI/UX Designer</option>
+                            <option>Business Analyst</option>
+                            <option>Product Manager</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Current Education</label>
+                        <select name="education">
+                            <option>B.Tech</option>
+                            <option>B.E</option>
+                            <option>M.Tech</option>
+                            <option>MCA</option>
+                            <option>BCA</option>
+                            <option>Diploma</option>
+                            <option>B.Sc</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Current Year</label>
+                        <select name="current_year">
+                            <option>1st Year</option>
+                            <option>2nd Year</option>
+                            <option>3rd Year</option>
+                            <option>Final Year</option>
+                            <option>Graduate</option>
+                            <option>Working Professional</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Skill Level</label>
+                        <select name="skill_level">
+                            <option>Beginner</option>
+                            <option>Intermediate</option>
+                            <option>Advanced</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Dream Company (Optional)</label>
+                        <input type="text" name="dream_company" placeholder="Google, Microsoft, Amazon...">
+                    </div>
+                    <div class="control-group">
+                        <label>Weekly Study Hours</label>
+                        <select name="study_hours">
+                            <option>5 Hours</option>
+                            <option>10 Hours</option>
+                            <option>15 Hours</option>
+                            <option>20 Hours</option>
+                            <option>30 Hours</option>
+                            <option>40 Hours</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group full-width">
+                    <label>Current Skills</label>
+                    <textarea name="current_skills" rows="6" placeholder="Python
+SQL
+HTML
+CSS
+JavaScript
+Java
+Git
+Flask"></textarea>
+                </div>
+                <button type="submit" class="btn-primary large-btn">✨ Analyze My Skills</button>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>
